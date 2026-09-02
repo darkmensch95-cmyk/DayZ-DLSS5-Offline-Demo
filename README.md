@@ -60,6 +60,14 @@ The repository intentionally contains **no third-party ReShade/NVIDIA/RenoDX/Lum
 > [!IMPORTANT]
 > **beta7 includes fixes found during a real Windows/DayZ smoke test on the reference RTX 5090 machine.** The installer completed successfully, the local DayZDiag server/client launch path was verified, and the automatic cleanup was manually checked afterward: no known ReShade/DLSS5 demo payload remained in the DayZ root and BattlEye remained in its normal Steam state. This is still a beta and not a universal guarantee for every system/update. See [Testing status](./docs/TESTING_STATUS.md).
 
+## Planned for v1.0-beta8
+
+beta7 intentionally keeps the local server mission simple and focused on getting the DLSS 5 render path running reliably.
+
+For **v1.0-beta8**, the plan is to add an optional **admin-enabled local showcase mission** with the familiar **Z admin menu** used during the original testing. The goal is to make screenshots and comparison videos much easier by allowing local/offline control over things such as item/weapon spawning, player setup and showcase conditions without having to manually prepare every scene.
+
+This will remain strictly part of the **local DayZDiag/offline workflow**. It is not intended for normal BattlEye multiplayer.
+
 ## Where the project is installed
 
 The GitHub ZIP/source folder itself can be extracted **anywhere** — Desktop, Downloads, etc. It is only the installer source.
