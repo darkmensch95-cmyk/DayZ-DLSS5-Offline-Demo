@@ -2,9 +2,41 @@
 setlocal EnableExtensions
 title DayZ DLSS5 Offline Demo
 
-rem The PowerShell launcher requires administrator rights because it stages
-rem temporary files into the DayZ installation and creates the recovery task.
-rem Self-elevate instead of silently failing when launched by double-click.
+set "INSTROOT=C:\DayZ_DLSS5_OFFLINE_DEMO"
+
+rem This CMD exists both in the downloaded repository and in the installed app.
+rem config.json only exists after INSTALL.cmd has completed successfully.
+if not exist "%~dp0config.json" (
+    if exist "%INSTROOT%\config.json" if exist "%INSTROOT%\START_OFFLINE_DEMO.cmd" (
+        echo This is the downloaded/source folder, not the installed demo.
+        echo Starting the installed copy from:
+        echo   %INSTROOT%
+        echo.
+        call "%INSTROOT%\START_OFFLINE_DEMO.cmd"
+        exit /b %ERRORLEVEL%
+    )
+
+    echo ============================================================
+    echo DAYZ DLSS5 OFFLINE DEMO IS NOT INSTALLED YET
+    echo ============================================================
+    echo.
+    echo You are running START_OFFLINE_DEMO.cmd from the downloaded
+    echo repository folder:
+    echo   %~dp0
+    echo.
+    echo Run INSTALL.cmd from this folder first.
+    echo The installer will create:
+    echo   %INSTROOT%
+    echo.
+    echo After installation you can start the demo either from the
+    echo installed folder or by clicking this file again.
+    echo.
+    pause
+    exit /b 2
+)
+
+rem The installed PowerShell launcher requires administrator rights because it
+rem temporarily stages files into the DayZ installation and creates a recovery task.
 fltmc >nul 2>&1
 if errorlevel 1 (
     echo Requesting administrator privileges...
