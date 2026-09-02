@@ -141,10 +141,17 @@ try {
     [void](Extract-FileFromRelease "RankFTW/rhi-repo" $DlssTag "nvngx_dlss.dll" (Join-Path $Payload "nvngx_dlss.dll") $Cache)
     [void](Test-Sha256 (Join-Path $Payload "nvngx_dlssnr.dll") $DlssNrSha256 "NVIDIA DLSS NR $DlssNrTag")
     [void](Test-Sha256 (Join-Path $Payload "nvngx_dlss.dll") $DlssSha256 "NVIDIA DLSS $DlssTag")
-    Assert-NvidiaSignature (Join-Path $Payload "nvngx_dlssnr.dll")
+    $nrSig = Get-AuthenticodeSignature (Join-Path $Payload "nvngx_dlssnr.dll")
+    if ($nrSig.Status -eq [System.Management.Automation.SignatureStatus]::NotSigned) {
+        Write-Host "DLSS NR SF-v2 is unsigned; exact pinned SHA-256 verification passed." -ForegroundColor Yellow
+    } elseif ($nrSig.Status -eq [System.Management.Automation.SignatureStatus]::Valid -and [string]$nrSig.SignerCertificate.Subject -match "NVIDIA") {
+        Write-Host "DLSS NR runtime also has a valid NVIDIA signature." -ForegroundColor Green
+    } else {
+        throw "Unexpected Authenticode state for pinned DLSS NR runtime: $($nrSig.Status)"
+    }
     Assert-NvidiaSignature (Join-Path $Payload "nvngx_dlss.dll")
     $Manifest.RenoDX = @{ tag=$RenoTag; source="https://github.com/RankFTW/rhi-repo"; sha256=(Get-FileHash (Join-Path $Payload "renodx-dlss5.addon64") -Algorithm SHA256).Hash; note="Community-distributed closed-source add-on; not bundled in this release ZIP" }
-    $Manifest.DLSSNR = @{ tag=$DlssNrTag; source="https://github.com/RankFTW/rhi-repo"; sha256=(Get-FileHash (Join-Path $Payload "nvngx_dlssnr.dll") -Algorithm SHA256).Hash; authenticode="NVIDIA signature verified" }
+    $Manifest.DLSSNR = @{ tag=$DlssNrTag; source="https://github.com/RankFTW/rhi-repo"; sha256=(Get-FileHash (Join-Path $Payload "nvngx_dlssnr.dll") -Algorithm SHA256).Hash; authenticode=[string]$nrSig.Status; note="Pinned SF-v2 runtime is accepted by exact SHA-256; upstream package is currently NotSigned" }
     $Manifest.DLSS = @{ tag=$DlssTag; source="https://github.com/RankFTW/rhi-repo"; sha256=(Get-FileHash (Join-Path $Payload "nvngx_dlss.dll") -Algorithm SHA256).Hash; authenticode="NVIDIA signature verified" }
 
     Write-Banner "7/9 - Install the tested DayZ preset"
