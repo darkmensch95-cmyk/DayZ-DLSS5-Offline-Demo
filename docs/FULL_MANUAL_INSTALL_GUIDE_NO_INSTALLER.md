@@ -229,11 +229,14 @@ renodx-dlss5.addon64
 
 Place it in the payload root.
 
-Known tested SHA-256:
+Pinned SHA-256 for the current beta5 RenoDX 4.70 asset:
 
 ```text
-E1C28FDE0922B12FC10734E58C3D24A36808E575247F4FD4F36226540D7EE023
+D5ADF82EB44B065F4C590AC91FE824BAB07AFEA0EB9F994BDE936710C8593952
 ```
+
+> [!IMPORTANT]
+> The upstream 4.70 release asset was updated after the original showcase. The current beta5 installer pins the hash above so a future asset replacement cannot silently change the binary. See `docs/TESTING_STATUS.md` for the distinction between the original showcase build and the current beta5 release candidate.
 
 From `dlssnr-310.8.SF-v2`, extract:
 
@@ -413,16 +416,15 @@ This is a better verification than relying only on visual differences.
 
 The reference test showed periods with almost no non-zero motion vectors, followed by periods with high coverage. The Lumenite debug view confirmed that reconstructed vectors existed, but validation could discard large areas.
 
-The cleanest showcase result was obtained with:
+The showcase preset uses:
 
 ```text
 MV sign = +1 / +1
 MV scale = 1.0
-validation sub-tests disabled
 reset_every=1
 ```
 
-Without history reset, camera motion visibly smeared the image. Resetting every frame removed that smear, but sacrifices temporal accumulation. Treat this as a technical/image-quality demo, not native-quality temporal DLSS integration.
+The included preset also contains the captured showcase validation settings. The history reset is the important anti-smear workaround: without it, camera motion visibly smeared the image in the reference test. Resetting every frame removes that temporal history, so treat this as a technical/image-quality demo rather than native-quality temporal DLSS integration.
 
 ## 19. RenoDX panel / comparison captures
 
@@ -483,7 +485,7 @@ Select-Object Name,Length
 
 For this experiment that should return nothing.
 
-If you are unsure, use Steam Verify Integrity before normal multiplayer.
+**Required before normal multiplayer:** use Steam → DayZ → Properties → Installed Files → **Verify integrity of game files**, and wait for Steam to finish completely.
 
 ## 21. Troubleshooting summary
 
@@ -493,7 +495,7 @@ If you are unsure, use Steam Verify Integrity before normal multiplayer.
 
 **Depth purple/white/nonsense:** choose full-resolution D24S8, enable copy-before-clear, then select the main scene clear.
 
-**Everything smears when moving:** confirm `reset_every=1` and use the included tested `dlss5.ini`.
+**Everything smears when moving:** confirm `reset_every=1` and use the included `dlss5.ini`.
 
 **No motion vectors:** make sure `Lumenite_Kernel` is enabled above `DLSS 5 Feed`, `DLSS5_MV_PROVIDER=3` is set, and all Lumenite includes/textures were copied.
 
@@ -543,7 +545,7 @@ Before normal multiplayer:
 - [ ] logs removed if desired
 - [ ] `DayZ_BE.exe` exists
 - [ ] `BattlEye\` exists
-- [ ] optional Steam verify complete
+- [ ] Steam integrity verification completed after cleanup/uninstall
 
 ## Disclaimer
 
