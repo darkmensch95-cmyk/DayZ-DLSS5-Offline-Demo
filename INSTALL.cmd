@@ -40,7 +40,6 @@ goto UNKNOWN_EXISTING
 :COMPLETE_INSTALL
 echo A previous complete project installation was found.
 echo The installer will run its cleanup tool first, verify success, remove the
-
 echo old project folder, and then install this build fresh.
 echo.
 echo BattlEye itself will NOT be renamed, disabled, patched or deleted.
@@ -78,7 +77,7 @@ if /I not "%PARTIAL%"=="RETRY" goto UPGRADE_CANCELLED
 
 echo.
 echo Verifying DayZ is clean before removing the partial project folder...
-powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ". '%~dp0COMMON.ps1'; Ensure-DayZClosed; $d=Find-DayZInstall ''; Assert-BattlEyeNormal $d; $left=@(Get-DemoFilesInDayZ $d); if($left.Count -gt 0){ Write-Host 'Known demo files are still present in the DayZ root:' -ForegroundColor Red; $left ^| ForEach-Object { Write-Host ('  ' + $_) -ForegroundColor Red }; exit 31 }; Write-Host 'DayZ root check passed.' -ForegroundColor Green; exit 0"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ". '%~dp0COMMON.ps1'; Ensure-DayZClosed; $d=Find-DayZInstall ''; Assert-BattlEyeNormal $d; $left=@(Get-DemoFilesInDayZ $d); if($left.Count -gt 0){ Write-Host 'Known demo files are still present in the DayZ root:' -ForegroundColor Red; foreach($item in $left){ Write-Host ('  ' + $item) -ForegroundColor Red }; exit 31 }; Write-Host 'DayZ root check passed.' -ForegroundColor Green; exit 0"
 if errorlevel 1 goto PARTIAL_CLEAN_FAILED
 
 rmdir /s /q "%APPROOT%"
@@ -90,7 +89,6 @@ goto RUN_INSTALL
 
 :UNKNOWN_EXISTING
 echo ERROR: %APPROOT% exists, but it does not match either a complete installation
-
 echo or the known shape of a failed partial installation from this project.
 echo It will NOT be deleted automatically.
 echo.
@@ -110,7 +108,6 @@ exit /b 0
 echo.
 echo ============================================================
 echo UPGRADE ABORTED - OLD INSTALLATION COULD NOT BE CLEANED
-
 echo ============================================================
 echo DO NOT delete the old installation yet.
 echo DO NOT launch normal DayZ / BattlEye until the cleanup problem is resolved.
@@ -123,7 +120,6 @@ exit /b 21
 echo.
 echo ============================================================
 echo RETRY ABORTED - DAYZ CLEAN-STATE CHECK FAILED
-
 echo ============================================================
 echo The partial project folder was NOT deleted.
 echo DO NOT launch normal DayZ / BattlEye until the reported problem is resolved.
