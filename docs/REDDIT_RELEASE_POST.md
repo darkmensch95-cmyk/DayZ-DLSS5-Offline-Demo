@@ -63,6 +63,26 @@ The repo includes:
 - sources/licenses
 - disclaimers
 
+## Important: where to install / launch it from
+
+The downloaded GitHub ZIP can be extracted anywhere, for example your Desktop or Downloads folder.
+
+Run `INSTALL.cmd` from that extracted folder. The installer creates the actual working installation here:
+
+```text
+C:\DayZ_DLSS5_OFFLINE_DEMO
+```
+
+After installation, launch the demo from:
+
+```text
+C:\DayZ_DLSS5_OFFLINE_DEMO\START_OFFLINE_DEMO.cmd
+```
+
+Do **not** keep launching the START file from the downloaded GitHub folder after installation. The installed copy under `C:\DayZ_DLSS5_OFFLINE_DEMO` contains the generated config, payload, LocalHost files and runtime state the demo needs.
+
+The project does **not** permanently live inside the DayZ game folder. The known ReShade/DLSS5 payload is only staged next to DayZ while the offline demo is running and is removed again by cleanup.
+
 The project does **not** bundle third-party ReShade/NVIDIA/RenoDX/Lumenite binaries. The installer downloads the pinned/tested components from the documented upstream sources instead.
 
 One important limitation:
@@ -83,8 +103,8 @@ On my DayZ 1.29 / 2560×1440 test, that was `CLEAR 1`.
 ## Before going back to normal multiplayer — do all of this
 
 1. Close the DayZDiag client and local server.
-2. Run `CLEAN_FOR_MULTIPLAYER.cmd` (or `UNINSTALL.cmd` if removing the project).
-3. Run `STATUS.cmd`.
+2. Run `C:\DayZ_DLSS5_OFFLINE_DEMO\CLEAN_FOR_MULTIPLAYER.cmd` (or `UNINSTALL.cmd` if removing the project).
+3. Run `C:\DayZ_DLSS5_OFFLINE_DEMO\STATUS.cmd`.
 4. Require:
 
 ```text
@@ -133,7 +153,7 @@ Have fun breaking an old engine in new ways :D
 
 For anyone who doesn't trust random PowerShell installers from Reddit (fair lol): there is a full manual guide in the repo. You can download every component yourself from ReShade/GitHub, build the payload manually, start the local DayZDiag server first, and only stage the graphics files for the local Diag client.
 
-**Again: do not use this with normal DayZ/BattlEye. When you're done, clean it, check `STATE: MULTIPLAYER CLEAN`, and verify the DayZ game files in Steam before going back online.**
+**Again: install/run the working copy from `C:\DayZ_DLSS5_OFFLINE_DEMO`, do not use this with normal DayZ/BattlEye, and when you're done clean it, check `STATE: MULTIPLAYER CLEAN`, and verify the DayZ game files in Steam before going back online.**
 
 Video:
 https://youtu.be/68b9V59VxeM
