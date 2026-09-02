@@ -58,15 +58,41 @@ https://github.com/darkmensch95-cmyk/DayZ-DLSS5-Offline-Demo/archive/refs/heads/
 The repository intentionally contains **no third-party ReShade/NVIDIA/RenoDX/Lumenite binaries or shader packs**. The installer downloads pinned components from their documented upstream sources and verifies exact hashes where applicable.
 
 > [!IMPORTANT]
-> **beta7 includes fixes found during a real Windows/DayZ smoke test on the reference RTX 5090 machine.** The installer completed successfully, the local DayZDiag server/client launch path was verified, and the automatic cleanup was manually checked afterward: no known ReShade/DLSS5 demo payload remained in the DayZ root and BattlEye remained in its normal Steam state. This is still a beta and not a universal guarantee for every system/update. See [Testing status](./docs/TESTING_STATUS.md).
+> **beta7 was run from a fresh GitHub download on the reference Windows / RTX 5090 machine.** Installation completed successfully, the shipped preset brought up the ReShade/DLSS5 render path without manual reconfiguration, the local DayZDiag server/client launch path worked, and the manual cleanup/status path was verified clean afterward. **The automatic cleanup that runs when DayZDiag closes is currently broken in beta7 — see the known issue below.**
+
+## Known issue in v1.0-beta7 — automatic cleanup
+
+The **automatic cleanup triggered when the DayZDiag client closes can currently crash**. This was reproduced during the real beta7 end-to-end test on the reference machine.
+
+The standalone manual cleanup was then tested successfully. Until beta8, **do not rely on the automatic cleanup after closing the game**. After every demo session, run:
+
+```text
+C:\DayZ_DLSS5_OFFLINE_DEMO\CLEAN_FOR_MULTIPLAYER.cmd
+C:\DayZ_DLSS5_OFFLINE_DEMO\STATUS.cmd
+```
+
+and require:
+
+```text
+STATE: MULTIPLAYER CLEAN
+```
+
+Then verify DayZ through Steam before returning to normal BattlEye multiplayer.
+
+**Fixing the automatic cleanup is planned for v1.0-beta8.**
 
 ## Planned for v1.0-beta8
 
 beta7 intentionally keeps the local server mission simple and focused on getting the DLSS 5 render path running reliably.
 
-For **v1.0-beta8**, the plan is to add an optional **admin-enabled local showcase mission** with the familiar **Z admin menu** used during the original testing. The goal is to make screenshots and comparison videos much easier by allowing local/offline control over things such as item/weapon spawning, player setup and showcase conditions without having to manually prepare every scene.
+For **v1.0-beta8**, the plan is to:
 
-This will remain strictly part of the **local DayZDiag/offline workflow**. It is not intended for normal BattlEye multiplayer.
+- fix the automatic cleanup-on-exit path;
+- add an optional **admin-enabled local showcase mission** with the familiar **Z admin menu** used during the original testing.
+
+The admin-enabled mission is intended to make screenshots and comparison videos much easier by allowing local/offline control over things such as item/weapon spawning, player setup and showcase conditions without having to manually prepare every scene.
+
+Everything in beta8 will remain strictly part of the **local DayZDiag/offline workflow**. It is not intended for normal BattlEye multiplayer.
 
 ## Where the project is installed
 
@@ -86,7 +112,7 @@ C:\DayZ_DLSS5_OFFLINE_DEMO\START_OFFLINE_DEMO.cmd
 
 Do **not** keep launching `START_OFFLINE_DEMO.cmd` from the downloaded/extracted GitHub source folder after installation. The installed copy under `C:\DayZ_DLSS5_OFFLINE_DEMO` contains the generated `config.json`, downloaded payload, LocalHost files, logs and runtime state the launcher needs.
 
-The actual DayZ game directory is **not** the permanent home of this project. During an active offline demo only, the launcher temporarily stages the known ReShade/DLSS5 payload next to DayZ, then removes it again during cleanup.
+The actual DayZ game directory is **not** the permanent home of this project. During an active offline demo only, the launcher temporarily stages the known ReShade/DLSS5 payload next to DayZ, then the cleanup tools remove it again.
 
 ## Quick start
 
@@ -100,6 +126,7 @@ The actual DayZ game directory is **not** the permanent home of this project. Du
 8. Wait for the local server and DayZDiag client. beta7 waits for the actual `DayZDiag_x64.exe -server` process, gives the server 40 seconds to finish CE/Hive startup, then stages the render payload and launches the local client.
 9. In DayZ, disable Hardware Antialiasing / MSAA.
 10. `Home` opens ReShade. In the tested RenoDX build, `F6` toggles Neural Rendering.
+11. **When finished, manually run `CLEAN_FOR_MULTIPLAYER.cmd` and then `STATUS.cmd` because beta7 automatic cleanup is currently broken.**
 
 If an earlier installer attempt failed and left a recognized partial `C:\DayZ_DLSS5_OFFLINE_DEMO` folder, the current `INSTALL.cmd` can verify the DayZ root is clean and offer a controlled `RETRY` instead of blindly deleting unknown data.
 
@@ -111,7 +138,7 @@ If an earlier installer attempt failed and left a recognized partial `C:\DayZ_DL
 When you are done with the experiment:
 
 1. Close the DayZDiag client and local server.
-2. Run `C:\DayZ_DLSS5_OFFLINE_DEMO\CLEAN_FOR_MULTIPLAYER.cmd` (or `UNINSTALL.cmd` if removing the project).
+2. **In beta7, manually run** `C:\DayZ_DLSS5_OFFLINE_DEMO\CLEAN_FOR_MULTIPLAYER.cmd` (or `UNINSTALL.cmd` if removing the project). Do not assume the automatic exit cleanup succeeded.
 3. Run `C:\DayZ_DLSS5_OFFLINE_DEMO\STATUS.cmd` and require:
 
 ```text
