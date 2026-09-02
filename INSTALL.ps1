@@ -4,7 +4,10 @@ param([string]$DayZPath = "")
 $Here = Split-Path -Parent $PSCommandPath
 . (Join-Path $Here "COMMON.ps1")
 
-$Version = "1.0-beta2"
+$VersionFile = Join-Path $Here "VERSION.txt"
+if (-not (Test-Path $VersionFile)) { throw "VERSION.txt is missing." }
+$Version = (Get-Content $VersionFile -Raw).Trim()
+if ([string]::IsNullOrWhiteSpace($Version)) { throw "VERSION.txt is empty." }
 $AppRoot = "C:\DayZ_DLSS5_OFFLINE_DEMO"
 $Payload = Join-Path $AppRoot "payload"
 $Cache = Join-Path $AppRoot "cache"
@@ -16,9 +19,20 @@ $ReShadeUrl = "https://reshade.me/downloads/ReShade_Setup_6.8.0_Addon.exe"
 $ReShadeSha256 = "AFE4C8F13048306307983B8B3D41D5BF00A86820440B0E57DEA10950E1176445"
 $FeederTag = "v0.7.0"
 $RenoTag = "renodx-dlss5-4.70"
-$RenoSha256 = "E1C28FDE0922B12FC10734E58C3D24A36808E575247F4FD4F36226540D7EE023"
+$RenoSha256 = "D5ADF82EB44B065F4C590AC91FE824BAB07AFEA0EB9F994BDE936710C8593952"
 $DlssNrTag = "dlssnr-310.8.SF-v2"
 $DlssTag = "dlss-310.8.0"
+
+# Pin source trees used by this release. Do not silently follow moving branches.
+$ReShadeShadersCommit = "6db142b4b1a05c764222e5b0bd9a644b7ccfe1dc"
+$LumeniteCommit = "76fa3e4d601c97e9bc63f119c01405b7b9938885"
+$DayZLocalHostCommit = "053b19315d940182899c86afb4fcd6b668091c7c"
+
+# Pin downloaded/extracted content wherever an exact tested/current release hash is known.
+$FeederAddonSha256 = "E6861ABEF41BC90934352A967017DD019BCE6D746D35910B67C7DD20F061C0E2"
+$FeederShaderSha256 = "CBC997A1D0B9B0E00B8C4E912A09BC4B1AEF968AD36269502CBE386499264222"
+$DlssNrSha256 = "6EB209E764F39872625DEBD6ABAF45E2BB6322F6F270F781F70C059AE30B3927"
+$DlssSha256 = "C85F971CE023C9F3492FC7455F0B01A24BA18EA39636407A846902C4360B0B7E"
 
 Ensure-Admin
 Ensure-DayZClosed
@@ -86,8 +100,7 @@ try {
     Copy-Item $reshDll (Join-Path $Payload "dxgi.dll") -Force
 
     Write-Banner "3/9 - ReShade standard shader pack"
-    $reshBranch = Resolve-GitHubBranch "crosire/reshade-shaders" "slim"
-    $reshSha = [string]$reshBranch.commit.sha
+    $reshSha = $ReShadeShadersCommit
     $reshZip = Join-Path $Cache "reshade-shaders.zip"
     $reshEx = Join-Path $Cache "reshade-shaders"
     Download-File "https://github.com/crosire/reshade-shaders/archive/$reshSha.zip" $reshZip 10000
@@ -105,11 +118,12 @@ try {
     $feedRel = Get-GitHubRelease "jlrouzies-fr/DLSS5-Feeder" $FeederTag
     [void](Download-ReleaseAsset $feedRel "dlss5-feed.addon64" (Join-Path $Payload "dlss5-feed.addon64") 50000)
     [void](Download-ReleaseAsset $feedRel "DLSS5_Feed.fx" (Join-Path $shaderDir "DLSS5_Feed.fx") 10000)
-    $Manifest.Feeder = @{ tag=$FeederTag; source="https://github.com/jlrouzies-fr/DLSS5-Feeder"; addon_sha256=(Get-FileHash (Join-Path $Payload "dlss5-feed.addon64") -Algorithm SHA256).Hash; shader_sha256=(Get-FileHash (Join-Path $shaderDir "DLSS5_Feed.fx") -Algorithm SHA256).Hash; license="MIT" }
+    [void](Test-Sha256 (Join-Path $Payload "dlss5-feed.addon64") $FeederAddonSha256 "DLSS5-Feeder v0.7.0 addon")
+    [void](Test-Sha256 (Join-Path $shaderDir "DLSS5_Feed.fx") $FeederShaderSha256 "DLSS5-Feeder v0.7.0 shader")
+    $Manifest.Feeder = @{ tag=$FeederTag; source="https://github.com/jlrouzies-fr/DLSS5-Feeder"; addon_sha256=$FeederAddonSha256; shader_sha256=$FeederShaderSha256; license="MIT" }
 
     Write-Banner "5/9 - LumeniteFX from the author's official repository"
-    $lumiBranch = Resolve-GitHubBranch "umar-afzaal/LumeniteFX" "mainline"
-    $lumiSha = [string]$lumiBranch.commit.sha
+    $lumiSha = $LumeniteCommit
     $lumiZip = Join-Path $Cache "LumeniteFX.zip"
     $lumiEx = Join-Path $Cache "LumeniteFX"
     Download-File "https://github.com/umar-afzaal/LumeniteFX/archive/$lumiSha.zip" $lumiZip 10000
@@ -125,6 +139,8 @@ try {
     [void](Test-Sha256 (Join-Path $Payload "renodx-dlss5.addon64") $RenoSha256 "renodx-dlss5.addon64 4.70")
     [void](Extract-FileFromRelease "RankFTW/rhi-repo" $DlssNrTag "nvngx_dlssnr.dll" (Join-Path $Payload "nvngx_dlssnr.dll") $Cache)
     [void](Extract-FileFromRelease "RankFTW/rhi-repo" $DlssTag "nvngx_dlss.dll" (Join-Path $Payload "nvngx_dlss.dll") $Cache)
+    [void](Test-Sha256 (Join-Path $Payload "nvngx_dlssnr.dll") $DlssNrSha256 "NVIDIA DLSS NR $DlssNrTag")
+    [void](Test-Sha256 (Join-Path $Payload "nvngx_dlss.dll") $DlssSha256 "NVIDIA DLSS $DlssTag")
     Assert-NvidiaSignature (Join-Path $Payload "nvngx_dlssnr.dll")
     Assert-NvidiaSignature (Join-Path $Payload "nvngx_dlss.dll")
     $Manifest.RenoDX = @{ tag=$RenoTag; source="https://github.com/RankFTW/rhi-repo"; sha256=(Get-FileHash (Join-Path $Payload "renodx-dlss5.addon64") -Algorithm SHA256).Hash; note="Community-distributed closed-source add-on; not bundled in this release ZIP" }
@@ -144,8 +160,7 @@ try {
     Set-Content $ini $txt -Encoding UTF8
 
     Write-Banner "8/9 - Local DayZDiag server helper"
-    $lhBranch = Resolve-GitHubBranch "Cho-Buggers/DayZ_LocalHost" "main"
-    $lhSha = [string]$lhBranch.commit.sha
+    $lhSha = $DayZLocalHostCommit
     $lhZip = Join-Path $Cache "DayZ_LocalHost.zip"
     $lhEx = Join-Path $Cache "DayZ_LocalHost"
     Download-File "https://github.com/Cho-Buggers/DayZ_LocalHost/archive/$lhSha.zip" $lhZip 10000
@@ -157,11 +172,16 @@ try {
 
     $serverPs = Join-Path $LocalHost "DZ_server.ps1"
     if (-not (Test-Path $serverPs)) { throw "DayZ_LocalHost copy failed: DZ_server.ps1 not found at expected path." }
+    $serverBat = Join-Path $LocalHost "DZ_localhost+logmonitor.bat"
+    if (-not (Test-Path $serverBat)) { throw "DayZ_LocalHost server-only launcher is missing." }
+    $serverBatText = Get-Content $serverBat -Raw
+    if ($serverBatText -notmatch '-ignoreClient') { throw "DayZ_LocalHost server launcher no longer contains -ignoreClient. Installer stopped rather than risking a client auto-launch." }
     $serverText = Get-Content $serverPs -Raw
-    $oldLine = '$dzPath = (Get-ItemProperty -Path "HKLM:\SOFTWARE\WOW6432Node\bohemia interactive\dayz").main'
-    if (-not $serverText.Contains($oldLine)) { throw "DayZ_LocalHost changed upstream; the exact safe path-patch line was not found. Installer stopped rather than guessing." }
+    $dzPathPattern = '(?m)^\s*\$dzPath\s*=\s*\(Get-ItemProperty\s+-Path\s+"HKLM:\\SOFTWARE\\WOW6432Node\\bohemia interactive\\dayz"\)\.main\s*$'
+    $dzPathMatches = [regex]::Matches($serverText, $dzPathPattern)
+    if ($dzPathMatches.Count -ne 1) { throw "DayZ_LocalHost changed upstream; expected exactly one DayZ registry-path assignment, found $($dzPathMatches.Count). Installer stopped rather than guessing." }
     $safePath = $DayZPath.Replace("'","''")
-    $serverText = $serverText.Replace($oldLine, "`$dzPath = '$safePath'")
+    $serverText = $serverText.Replace($dzPathMatches[0].Value, "`$dzPath = '$safePath'")
     Set-Content $serverPs $serverText -Encoding UTF8
     New-Item -ItemType Directory -Force -Path (Join-Path $env:USERPROFILE "Documents\DayZServer") | Out-Null
     $Manifest.DayZLocalHost = @{ branch="main"; commit=$lhSha; source="https://github.com/Cho-Buggers/DayZ_LocalHost"; license="GPL-3.0"; note="Downloaded at install time and locally patched only with the detected DayZ path" }
