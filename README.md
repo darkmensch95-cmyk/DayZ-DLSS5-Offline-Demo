@@ -60,17 +60,38 @@ The repository intentionally contains **no third-party ReShade/NVIDIA/RenoDX/Lum
 > [!IMPORTANT]
 > **beta7 includes fixes found during a real Windows/DayZ smoke test on the reference RTX 5090 machine.** The installer completed successfully, the local DayZDiag server/client launch path was verified, and the automatic cleanup was manually checked afterward: no known ReShade/DLSS5 demo payload remained in the DayZ root and BattlEye remained in its normal Steam state. This is still a beta and not a universal guarantee for every system/update. See [Testing status](./docs/TESTING_STATUS.md).
 
+## Where the project is installed
+
+The GitHub ZIP/source folder itself can be extracted **anywhere** — Desktop, Downloads, etc. It is only the installer source.
+
+Run `INSTALL.cmd` from that extracted folder. The installer creates the actual working installation at:
+
+```text
+C:\DayZ_DLSS5_OFFLINE_DEMO
+```
+
+After installation, launch the demo from:
+
+```text
+C:\DayZ_DLSS5_OFFLINE_DEMO\START_OFFLINE_DEMO.cmd
+```
+
+Do **not** keep launching `START_OFFLINE_DEMO.cmd` from the downloaded/extracted GitHub source folder after installation. The installed copy under `C:\DayZ_DLSS5_OFFLINE_DEMO` contains the generated `config.json`, downloaded payload, LocalHost files, logs and runtime state the launcher needs.
+
+The actual DayZ game directory is **not** the permanent home of this project. During an active offline demo only, the launcher temporarily stages the known ReShade/DLSS5 payload next to DayZ, then removes it again during cleanup.
+
 ## Quick start
 
 1. Close DayZ, DayZDiag and DayZ Launcher.
-2. Download and extract this repository.
-3. Run `INSTALL.cmd` as administrator.
-4. Read the warning and type exactly: `I UNDERSTAND OFFLINE ONLY`
-5. After installation, run `C:\DayZ_DLSS5_OFFLINE_DEMO\START_OFFLINE_DEMO.cmd`.
-6. Type exactly: `OFFLINE`.
-7. Wait for the local server and DayZDiag client. beta7 waits for the actual `DayZDiag_x64.exe -server` process, gives the server 40 seconds to finish CE/Hive startup, then stages the render payload and launches the local client.
-8. In DayZ, disable Hardware Antialiasing / MSAA.
-9. `Home` opens ReShade. In the tested RenoDX build, `F6` toggles Neural Rendering.
+2. Download the repository ZIP and extract it anywhere, for example to your Desktop.
+3. Run `INSTALL.cmd` from the extracted GitHub folder as administrator.
+4. Read the warning and type exactly: `I UNDERSTAND OFFLINE ONLY`.
+5. Wait until the installer reports `INSTALLATION COMPLETE`. The working install is now in `C:\DayZ_DLSS5_OFFLINE_DEMO`.
+6. From now on, run `C:\DayZ_DLSS5_OFFLINE_DEMO\START_OFFLINE_DEMO.cmd` — **not** the START file in the downloaded GitHub folder.
+7. Type exactly: `OFFLINE`.
+8. Wait for the local server and DayZDiag client. beta7 waits for the actual `DayZDiag_x64.exe -server` process, gives the server 40 seconds to finish CE/Hive startup, then stages the render payload and launches the local client.
+9. In DayZ, disable Hardware Antialiasing / MSAA.
+10. `Home` opens ReShade. In the tested RenoDX build, `F6` toggles Neural Rendering.
 
 If an earlier installer attempt failed and left a recognized partial `C:\DayZ_DLSS5_OFFLINE_DEMO` folder, the current `INSTALL.cmd` can verify the DayZ root is clean and offer a controlled `RETRY` instead of blindly deleting unknown data.
 
@@ -82,8 +103,8 @@ If an earlier installer attempt failed and left a recognized partial `C:\DayZ_DL
 When you are done with the experiment:
 
 1. Close the DayZDiag client and local server.
-2. Run `CLEAN_FOR_MULTIPLAYER.cmd` (or `UNINSTALL.cmd` if removing the project).
-3. Run `STATUS.cmd` and require:
+2. Run `C:\DayZ_DLSS5_OFFLINE_DEMO\CLEAN_FOR_MULTIPLAYER.cmd` (or `UNINSTALL.cmd` if removing the project).
+3. Run `C:\DayZ_DLSS5_OFFLINE_DEMO\STATUS.cmd` and require:
 
 ```text
 STATE: MULTIPLAYER CLEAN
