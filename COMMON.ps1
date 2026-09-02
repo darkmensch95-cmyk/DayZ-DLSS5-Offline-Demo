@@ -143,7 +143,7 @@ function Download-File([string]$Url,[string]$OutFile,[long]$MinimumBytes=1) {
     while ($attempt -lt 3) {
         $attempt++
         try {
-            Invoke-WebRequest -UseBasicParsing -Headers @{"User-Agent"="DayZ-DLSS5-Offline-Demo/1.0-beta5"} -Uri $Url -OutFile $OutFile
+            Invoke-WebRequest -UseBasicParsing -Headers @{"User-Agent"="DayZ-DLSS5-Offline-Demo/1.0-beta6"} -Uri $Url -OutFile $OutFile
             if (-not (Test-Path $OutFile)) { throw "Download did not create $OutFile" }
             $len = (Get-Item $OutFile).Length
             if ($len -lt $MinimumBytes) { throw "Downloaded file is unexpectedly small ($len bytes): $Url" }
@@ -212,6 +212,16 @@ function Resolve-GitHubBranch([string]$Repo,[string]$Branch) {
 
 function Assert-NvidiaSignature([string]$Path) {
     $sig = Get-AuthenticodeSignature $Path
+    $fileName = [System.IO.Path]::GetFileName($Path)
+
+    # The pinned DLSS NR 310.8.SF-v2 runtime from the documented upstream package
+    # is currently NotSigned. INSTALL.ps1 verifies its exact pinned SHA-256 before
+    # this function is called, so allow only that specific runtime to be unsigned.
+    if ($fileName -ieq "nvngx_dlssnr.dll" -and $sig.Status -eq [System.Management.Automation.SignatureStatus]::NotSigned) {
+        Write-Host "DLSS NR SF-v2 is unsigned; exact pinned SHA-256 verification already passed." -ForegroundColor Yellow
+        return
+    }
+
     if ($sig.Status -ne [System.Management.Automation.SignatureStatus]::Valid) { throw "NVIDIA runtime signature is not Valid: $Path ($($sig.Status))" }
     $subject = if ($sig.SignerCertificate) { [string]$sig.SignerCertificate.Subject } else { "" }
     if ($subject -notmatch "NVIDIA") { throw "Runtime signer is not NVIDIA: $Path ($subject)" }
