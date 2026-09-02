@@ -1,4 +1,4 @@
-﻿#requires -Version 5.1
+#requires -Version 5.1
 $Root = Split-Path -Parent $PSCommandPath
 . (Join-Path $Root "COMMON.ps1")
 Ensure-Admin
@@ -94,23 +94,59 @@ try {
     Write-Banner "Start local DayZDiag server (ReShade is NOT staged yet)"
     $bat = Join-Path $LocalHost "DZ_localhost+logmonitor.bat"
     if (-not (Test-Path $bat)) { throw "LocalHost launcher missing: $bat" }
-    $serverStart = Get-Date
+
     $serverWindow = Start-Process -FilePath "cmd.exe" -ArgumentList @("/k", "`"$bat`"") -WorkingDirectory $LocalHost -PassThru
-    $deadline = (Get-Date).AddSeconds(120)
+
+    # DayZ_LocalHost's visible monitor can show CE/Hive readiness even when that
+    # message is not reliably available in script_*.log on every installation.
+    # The reference machine reaches CE/Hive init in ~26s, so beta7 waits for the
+    # real DayZDiag -server process and then gives it a conservative 40s startup
+    # window before staging ReShade/DLSS and starting the local client.
+    $deadline = (Get-Date).AddSeconds(150)
     $ready = $false
-    $profile = Join-Path $env:USERPROFILE "Documents\DayZServer"
+    $serverPids = @()
+    $serverSeenAt = $null
+
+    Write-Host "Waiting for local DayZDiag server..." -ForegroundColor Cyan
+
     while ((Get-Date) -lt $deadline) {
-        Start-Sleep -Milliseconds 750
-        $latest = Get-ChildItem $profile -Filter "script_*.log" -ErrorAction SilentlyContinue | Where-Object { $_.LastWriteTime -ge $serverStart.AddSeconds(-2) } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-        if ($latest) {
-            $tail = Get-Content $latest.FullName -Tail 140 -ErrorAction SilentlyContinue
-            if ($tail -match "\[CE\]\[Hive\].*Init sequence finished") { $ready = $true; break }
+        Start-Sleep -Seconds 1
+
+        $servers = @(
+            Get-CimInstance Win32_Process -Filter "Name='DayZDiag_x64.exe'" -ErrorAction SilentlyContinue |
+            Where-Object { $_.CommandLine -match "(?i)(^|\s)-server(\s|$)" }
+        )
+
+        if ($servers.Count -lt 1) {
+            $serverSeenAt = $null
+            continue
+        }
+
+        $serverPids = @($servers | ForEach-Object { [int]$_.ProcessId })
+
+        if (-not $serverSeenAt) {
+            $serverSeenAt = Get-Date
+            Write-Host "Local DayZDiag server detected." -ForegroundColor Green
+            Write-Host "Waiting 40 seconds for CE/Hive initialization..." -ForegroundColor Cyan
+        }
+
+        if (((Get-Date) - $serverSeenAt).TotalSeconds -ge 40) {
+            $stillRunning = @(
+                Get-CimInstance Win32_Process -Filter "Name='DayZDiag_x64.exe'" -ErrorAction SilentlyContinue |
+                Where-Object { $_.CommandLine -match "(?i)(^|\s)-server(\s|$)" }
+            )
+
+            if ($stillRunning.Count -gt 0) {
+                $serverPids = @($stillRunning | ForEach-Object { [int]$_.ProcessId })
+                Write-Host "Local DayZDiag server startup wait complete." -ForegroundColor Green
+                $ready = $true
+                break
+            }
         }
     }
-    if (-not $ready) { throw "Local server was not ready after 120 seconds. See the server window/logs." }
 
-    $serverPids = @(Get-CimInstance Win32_Process -Filter "Name='DayZDiag_x64.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match "-server" } | ForEach-Object { [int]$_.ProcessId })
-    if ($serverPids.Count -lt 1) { throw "Server log reported ready, but no DayZDiag -server process could be identified." }
+    if (-not $ready) { throw "Local DayZDiag server did not remain running long enough to become ready." }
+    if ($serverPids.Count -lt 1) { throw "Local DayZDiag server PID could not be identified." }
 
     Write-Banner "Stage demo payload and launch DayZDiag client"
     Register-EmergencyCleanup
