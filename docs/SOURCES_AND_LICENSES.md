@@ -37,7 +37,7 @@ Files used:
 - `dlss5-feed.addon64`
 - `DLSS5_Feed.fx`
 
-The beta5 installer verifies their exact SHA-256 values in addition to GitHub's release-asset digest.
+The beta6 installer verifies their exact SHA-256 values in addition to GitHub's release-asset digest where supplied.
 
 Not bundled as third-party binary/shader assets; downloaded from upstream.
 
@@ -61,16 +61,16 @@ Pinned release: https://github.com/RankFTW/rhi-repo/releases/tag/renodx-dlss5-4.
 
 Target file: `renodx-dlss5.addon64`
 
-Pinned beta5 SHA-256 for the current upstream asset:
+Pinned beta6 SHA-256 for the current upstream asset:
 
 ```text
 D5ADF82EB44B065F4C590AC91FE824BAB07AFEA0EB9F994BDE936710C8593952
 ```
 
-The upstream 4.70 asset changed after the original showcase test. See `TESTING_STATUS.md`; beta5 requires a real Windows/DayZ smoke test before it should be announced as tested.
+The upstream 4.70 asset changed after the original showcase test. See `TESTING_STATUS.md`; beta6 requires a real Windows/DayZ smoke test before it should be announced as tested.
 
 ## NVIDIA DLSS Neural Rendering runtime
-Pinned release page used by the tested setup:
+Pinned release page used by the setup:
 https://github.com/RankFTW/rhi-repo/releases/tag/dlssnr-310.8.SF-v2
 
 Target file: `nvngx_dlssnr.dll`
@@ -81,7 +81,9 @@ Pinned extracted DLL SHA-256:
 6EB209E764F39872625DEBD6ABAF45E2BB6322F6F270F781F70C059AE30B3927
 ```
 
-The installer also checks that NVIDIA DLLs have a valid NVIDIA Authenticode signature.
+The pinned SF-v2 `nvngx_dlssnr.dll` currently reports Authenticode status **`NotSigned`** on Windows. beta6 therefore uses the exact pinned extracted SHA-256 as the mandatory trust gate for this file. It does **not** pretend that this particular file has a valid NVIDIA Authenticode signature.
+
+The release asset itself is fetched from the documented RankFTW/rhi-repo GitHub release. The installer also checks GitHub's release-asset digest when the API supplies one.
 
 NVIDIA software remains proprietary and is not relicensed by this project.
 
@@ -96,6 +98,8 @@ Pinned extracted DLL SHA-256:
 ```text
 C85F971CE023C9F3492FC7455F0B01A24BA18EA39636407A846902C4360B0B7E
 ```
+
+Unlike the SF-v2 NR runtime above, this file is required by beta6 to match the pinned SHA-256 **and** have a valid NVIDIA Authenticode signature.
 
 NVIDIA DLSS developer information:
 https://developer.nvidia.com/rtx/dlss
