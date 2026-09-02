@@ -83,6 +83,12 @@ Do **not** keep launching the START file from the downloaded GitHub folder after
 
 The project does **not** permanently live inside the DayZ game folder. The known ReShade/DLSS5 payload is only staged next to DayZ while the offline demo is running and is removed again by cleanup.
 
+## What's planned next
+
+**v1.0-beta8** is planned to add an optional **admin-enabled local showcase mission** with the **Z admin menu** I used while making the original comparison shots. The idea is to make showcase work much easier — spawning weapons/items, setting up the player and preparing scenes without manually hunting everything down first.
+
+That admin mission will still be strictly for the **local DayZDiag/offline setup**, not normal BattlEye multiplayer.
+
 The project does **not** bundle third-party ReShade/NVIDIA/RenoDX/Lumenite binaries. The installer downloads the pinned/tested components from the documented upstream sources instead.
 
 One important limitation:
