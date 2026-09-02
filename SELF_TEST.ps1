@@ -31,16 +31,22 @@ Check (Test-Path (Join-Path $Payload "reshade-shaders\Shaders\DisplayDepth.fx"))
 Check (Test-Path (Join-Path $Payload "reshade-shaders\Shaders\ReShade.fxh")) "ReShade.fxh exists"
 Check (Test-Path (Join-Path $Root "WATCHDOG.ps1")) "independent cleanup/safety watchdog exists"
 
+$renoExpected = "D5ADF82EB44B065F4C590AC91FE824BAB07AFEA0EB9F994BDE936710C8593952"
+$nrExpected = "6EB209E764F39872625DEBD6ABAF45E2BB6322F6F270F781F70C059AE30B3927"
+$dlssExpected = "C85F971CE023C9F3492FC7455F0B01A24BA18EA39636407A846902C4360B0B7E"
+$renoActual = (Get-FileHash (Join-Path $Payload "renodx-dlss5.addon64") -Algorithm SHA256).Hash.ToUpperInvariant()
+$nrActual = (Get-FileHash (Join-Path $Payload "nvngx_dlssnr.dll") -Algorithm SHA256).Hash.ToUpperInvariant()
+$dlssActual = (Get-FileHash (Join-Path $Payload "nvngx_dlss.dll") -Algorithm SHA256).Hash.ToUpperInvariant()
+Check ($renoActual -eq $renoExpected) "RenoDX DLSS5 4.70 hash matches the pinned build"
+Check ($nrActual -eq $nrExpected) "DLSS NR 310.8.SF-v2 hash matches the pinned build"
+Check ($dlssActual -eq $dlssExpected) "DLSS 310.8.0 hash matches the pinned build"
+
 try {
     $sig1 = Get-AuthenticodeSignature (Join-Path $Payload "nvngx_dlss.dll")
     $sig2 = Get-AuthenticodeSignature (Join-Path $Payload "nvngx_dlssnr.dll")
     Check ($sig1.Status -eq [System.Management.Automation.SignatureStatus]::Valid -and [string]$sig1.SignerCertificate.Subject -match "NVIDIA") "nvngx_dlss.dll has a valid NVIDIA signature"
-    Check ($sig2.Status -eq [System.Management.Automation.SignatureStatus]::Valid -and [string]$sig2.SignerCertificate.Subject -match "NVIDIA") "nvngx_dlssnr.dll has a valid NVIDIA signature"
-} catch { Fail "Could not verify NVIDIA Authenticode signatures: $($_.Exception.Message)" }
-
-$renoExpected = "D5ADF82EB44B065F4C590AC91FE824BAB07AFEA0EB9F994BDE936710C8593952"
-$renoActual = (Get-FileHash (Join-Path $Payload "renodx-dlss5.addon64") -Algorithm SHA256).Hash.ToUpperInvariant()
-Check ($renoActual -eq $renoExpected) "RenoDX DLSS5 4.70 hash matches the pinned build"
+    Check ($sig2.Status -eq [System.Management.Automation.SignatureStatus]::NotSigned -or ($sig2.Status -eq [System.Management.Automation.SignatureStatus]::Valid -and [string]$sig2.SignerCertificate.Subject -match "NVIDIA")) "nvngx_dlssnr.dll has pinned hash and an allowed Authenticode state"
+} catch { Fail "Could not inspect NVIDIA runtime Authenticode state: $($_.Exception.Message)" }
 
 $ri = Get-Content (Join-Path $Payload "ReShade.ini") -Raw
 Check ($ri -match 'PresetPath=\.\\dlss5\.ini') "ReShade uses dlss5.ini preset"
