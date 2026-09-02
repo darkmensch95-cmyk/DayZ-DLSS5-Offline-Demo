@@ -20,16 +20,22 @@ $pending = Test-Path (Join-Path $Root "cleanup_pending.flag")
 if ($found.Count -eq 0 -and $beExe -and $beDir -and -not $beModified -and -not $pending) {
     Write-Host "STATE: MULTIPLAYER CLEAN" -ForegroundColor Green
     Write-Host "This means the known demo hook/add-on files are absent and BattlEye has its normal names." -ForegroundColor DarkGray
-    Write-Host "It is not a promise from BattlEye or any server operator that no unrelated software can cause a kick/ban." -ForegroundColor DarkGray
+    Write-Host "It is NOT a promise from BattlEye or any server operator that the system/account is ban-safe." -ForegroundColor Red
+    Write-Host "" 
+    Write-Host "BEFORE NORMAL BATTLEYE MULTIPLAYER, VERIFY DAYZ THROUGH STEAM:" -ForegroundColor Yellow
+    Write-Host "  Steam -> Library -> DayZ -> Properties -> Installed Files" -ForegroundColor Cyan
+    Write-Host "        -> Verify integrity of game files" -ForegroundColor Cyan
+    Write-Host "Wait for verification/repair to finish completely before launching normal DayZ." -ForegroundColor Yellow
     exit 0
 }
 
 Write-Host "STATE: NOT CLEAN / DEMO ACTIVE OR INTERRUPTED" -ForegroundColor Red
+Write-Host "DO NOT launch normal DayZ / BattlEye in this state." -ForegroundColor Red
 if ($pending) { Write-Host "Emergency cleanup marker is present." -ForegroundColor Yellow }
 if ($found.Count -gt 0) {
     Write-Host "Demo files currently in DayZ:" -ForegroundColor Yellow
     $found | ForEach-Object { Write-Host "  $_" }
 }
 if (-not $beExe -or -not $beDir -or $beModified) { Write-Host "BattlEye is not in its normal Steam state." -ForegroundColor Red }
-Write-Host "Run CLEAN_FOR_MULTIPLAYER.cmd before launching normal DayZ." -ForegroundColor Yellow
+Write-Host "Run CLEAN_FOR_MULTIPLAYER.cmd, then STATUS.cmd, then Steam file verification before normal multiplayer." -ForegroundColor Yellow
 exit 2
