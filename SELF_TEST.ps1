@@ -56,9 +56,10 @@ Check ($pi -match '^Techniques=Lumenite_Kernel@lumenite_Kernel\.fx,DLSS5_Feed@DL
 Check ($pi -match 'MV_SIGN=1\.000000,1\.000000') "Motion-vector sign is +1/+1"
 Check ($pi -match 'MV_SCALE=1\.000000') "Motion-vector scale is 1.0"
 Check ($pi -match 'MV_VALIDATE=1') "Master MV validation is enabled"
-Check ($pi -match 'VALIDATE_DEPTH=0') "Depth sub-validation is disabled (tested DayZ preset)"
-Check ($pi -match 'VALIDATE_MV=0') "Consistency sub-validation is disabled (tested DayZ preset)"
-Check ($pi -match 'VALIDATE_STATIC=0') "Static sub-validation is disabled (tested DayZ preset)"
+Check ($pi -match 'VALIDATE_DEPTH=1') "Depth sub-validation matches the latest active captured preset"
+Check ($pi -match 'VALIDATE_LUMA=0') "Luma sub-validation matches the latest active captured preset"
+Check ($pi -match 'VALIDATE_MV=1') "Consistency sub-validation matches the latest active captured preset"
+Check ($pi -match 'VALIDATE_STATIC=1') "Static sub-validation matches the latest active captured preset"
 
 $fc = Get-Content (Join-Path $Payload "dlss5-feed.cfg") -Raw
 Check ($fc -match 'reset_every=1') "reset_every=1 showcase anti-smear workaround is set"
