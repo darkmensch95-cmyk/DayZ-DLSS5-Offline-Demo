@@ -56,6 +56,7 @@ The repo includes:
 - a watchdog that aborts if normal DayZ/BattlEye is launched while the demo payload is staged
 - self-test tools
 - the tested ReShade / feeder preset from my working showcase
+- DLSS5 Neural Rendering style controls (`Default`, `Natural`, `Cinematic`)
 - a full manual installation guide if you don't want to run the installer
 - all source/download links
 - troubleshooting
@@ -82,6 +83,20 @@ C:\DayZ_DLSS5_OFFLINE_DEMO\START_OFFLINE_DEMO.cmd
 Do **not** keep launching the START file from the downloaded GitHub folder after installation. The installed copy under `C:\DayZ_DLSS5_OFFLINE_DEMO` contains the generated config, payload, LocalHost files and runtime state the demo needs.
 
 The project does **not** permanently live inside the DayZ game folder. The known ReShade/DLSS5 payload is only staged next to DayZ while the offline demo is running and is removed again by cleanup.
+
+## Changing the DLSS5 Neural Rendering look
+
+After the RenoDX/DLSS5 add-on loads, ReShade gets an **extra RenoDX/DLSS5 settings tab at the top of the overlay**. This is added by the DLSS5/RenoDX add-on; it is not a normal stock ReShade tab.
+
+Inside that extra tab, **NR Style** can be changed live between:
+
+```text
+Default
+Natural
+Cinematic
+```
+
+So you can quickly compare the different DLSS5 Neural Rendering looks without rebuilding the setup or editing config files. More detail is in `docs/DLSS5_STYLE_CONTROLS.md`.
 
 ## Known beta7 issue: automatic cleanup
 
@@ -163,6 +178,10 @@ https://youtu.be/68b9V59VxeM
 Full manual setup instructions:
 
 `docs/FULL_MANUAL_INSTALL_GUIDE_NO_INSTALLER.md`
+
+DLSS5 NR style controls:
+
+`docs/DLSS5_STYLE_CONTROLS.md`
 
 BattlEye / online-use warning:
 
