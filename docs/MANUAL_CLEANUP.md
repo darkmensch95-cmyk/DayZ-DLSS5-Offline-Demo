@@ -1,7 +1,10 @@
 # Manual cleanup before normal multiplayer
 
 > [!CAUTION]
-> Do not launch normal DayZ while any of the experiment hook/add-on files remain in the DayZ folder.
+> ## DO NOT LAUNCH NORMAL DAYZ / BATTLEYE UNTIL THIS ENTIRE CLEANUP IS FINISHED
+> The experiment temporarily places ReShade Full Add-on, rendering add-ons and DLSS-related runtime files next to the DayZ executable. **Launching normal DayZ/BattlEye while those files remain can trigger anti-cheat action and may result in a kick, restriction or ban.**
+>
+> There is no anti-cheat / ban-safety guarantee. Cleanup tools can only check files known to this project.
 
 Close the DayZDiag client and local DayZDiag server first.
 
@@ -59,6 +62,31 @@ The installed launcher also provides `CLEAN_FOR_MULTIPLAYER.cmd` and `STATUS.cmd
 STATE: MULTIPLAYER CLEAN
 ```
 
-This only confirms that the known experiment files are absent and BattlEye has its normal names. It is **not** a promise from BattlEye or any server operator that unrelated software cannot cause a kick or ban.
+## Final required step: verify DayZ through Steam
 
-If you are unsure, use Steam → DayZ → Properties → Installed Files → Verify integrity before normal multiplayer.
+Even after the cleanup/status check passes, **verify the game files before returning to normal multiplayer:**
+
+```text
+Steam
+→ Library
+→ DayZ
+→ Properties
+→ Installed Files
+→ Verify integrity of game files
+```
+
+Wait for Steam to finish the verification/repair completely.
+
+Only after:
+
+1. the experiment payload has been removed;
+2. `STATUS.cmd` reports `STATE: MULTIPLAYER CLEAN`; **and**
+3. Steam has finished verifying DayZ;
+
+should you launch normal DayZ/BattlEye again.
+
+The cleanup/status tools confirm only that the known experiment files are absent and BattlEye has its normal names. They are **not a promise from BattlEye, Bohemia Interactive or any server operator that your system/account is ban-safe**.
+
+## Liability disclaimer
+
+This project is an unofficial technical experiment provided **AS IS**, without warranty. Use is entirely at your own risk. To the maximum extent permitted by applicable law, the authors/distributors accept no responsibility for bans, kicks, account restrictions, lost data, corrupted files, crashes, system instability or other damage caused by use or misuse. Nothing here excludes rights or liability that cannot legally be excluded.
