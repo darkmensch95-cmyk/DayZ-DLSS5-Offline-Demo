@@ -126,7 +126,8 @@ The actual DayZ game directory is **not** the permanent home of this project. Du
 8. Wait for the local server and DayZDiag client. beta7 waits for the actual `DayZDiag_x64.exe -server` process, gives the server 40 seconds to finish CE/Hive startup, then stages the render payload and launches the local client.
 9. In DayZ, disable Hardware Antialiasing / MSAA.
 10. `Home` opens ReShade. In the tested RenoDX build, `F6` toggles Neural Rendering.
-11. **When finished, manually run `CLEAN_FOR_MULTIPLAYER.cmd` and then `STATUS.cmd` because beta7 automatic cleanup is currently broken.**
+11. Once the RenoDX/DLSS5 add-on has loaded, look for the **extra RenoDX/DLSS5 settings tab at the top of the ReShade overlay**. Under **NR Style** you can switch the Neural Rendering look live between **Default**, **Natural** and **Cinematic**. This tab is added by the DLSS5/RenoDX add-on and is not part of a stock ReShade installation. See [DLSS5 NR style controls](./docs/DLSS5_STYLE_CONTROLS.md).
+12. **When finished, manually run `CLEAN_FOR_MULTIPLAYER.cmd` and then `STATUS.cmd` because beta7 automatic cleanup is currently broken.**
 
 If an earlier installer attempt failed and left a recognized partial `C:\DayZ_DLSS5_OFFLINE_DEMO` folder, the current `INSTALL.cmd` can verify the DayZ root is clean and offer a controlled `RETRY` instead of blindly deleting unknown data.
 
@@ -172,6 +173,7 @@ Don't trust a random PowerShell installer from Reddit? Fair enough.
 The manual path explains the whole stack and lets you download every component yourself:
 
 - [Full manual installation guide](./docs/FULL_MANUAL_INSTALL_GUIDE_NO_INSTALLER.md)
+- [DLSS5 NR style controls — Default / Natural / Cinematic](./docs/DLSS5_STYLE_CONTROLS.md)
 - [BattlEye / online-use warning and liability](./docs/BATTLEYE_WARNING_AND_LIABILITY.md)
 - [Testing status](./docs/TESTING_STATUS.md)
 - [All download links](./docs/ALL_DOWNLOAD_LINKS.md)
