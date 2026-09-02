@@ -49,7 +49,7 @@ DayZ does not provide native DLSS motion vectors to this external setup. Lumenit
 
 ## Download
 
-### Release candidate — v1.0-beta6
+### Public beta — v1.0-beta7
 
 Use GitHub's **Code → Download ZIP** button or download the current source archive directly:
 
@@ -58,7 +58,7 @@ https://github.com/darkmensch95-cmyk/DayZ-DLSS5-Offline-Demo/archive/refs/heads/
 The repository intentionally contains **no third-party ReShade/NVIDIA/RenoDX/Lumenite binaries or shader packs**. The installer downloads pinned components from their documented upstream sources and verifies exact hashes where applicable.
 
 > [!IMPORTANT]
-> The render stack has been field-tested on the reference machine, but the **beta6 installer/launcher still requires one full Windows/DayZ smoke test before it should be announced as a tested public release**. The upstream RenoDX 4.70 asset changed after the original showcase test. beta6 also fixes the installer after discovering that the pinned DLSS NR SF-v2 runtime is `NotSigned`; that file is now accepted only when its exact pinned SHA-256 matches. See [Testing status](./docs/TESTING_STATUS.md).
+> **beta7 includes fixes found during a real Windows/DayZ smoke test on the reference RTX 5090 machine.** The installer completed successfully, the local DayZDiag server/client launch path was verified, and the automatic cleanup was manually checked afterward: no known ReShade/DLSS5 demo payload remained in the DayZ root and BattlEye remained in its normal Steam state. This is still a beta and not a universal guarantee for every system/update. See [Testing status](./docs/TESTING_STATUS.md).
 
 ## Quick start
 
@@ -68,7 +68,7 @@ The repository intentionally contains **no third-party ReShade/NVIDIA/RenoDX/Lum
 4. Read the warning and type exactly: `I UNDERSTAND OFFLINE ONLY`
 5. After installation, run `C:\DayZ_DLSS5_OFFLINE_DEMO\START_OFFLINE_DEMO.cmd`.
 6. Type exactly: `OFFLINE`.
-7. Wait for the local server and DayZDiag client.
+7. Wait for the local server and DayZDiag client. beta7 waits for the actual `DayZDiag_x64.exe -server` process, gives the server 40 seconds to finish CE/Hive startup, then stages the render payload and launches the local client.
 8. In DayZ, disable Hardware Antialiasing / MSAA.
 9. `Home` opens ReShade. In the tested RenoDX build, `F6` toggles Neural Rendering.
 
@@ -101,9 +101,9 @@ The cleanup/status tools check the files known to this project. They are **not a
 
 ## Runtime verification model
 
-The release candidate pins exact hashes for the downloaded/extracted runtime components.
+The public beta pins exact hashes for the downloaded/extracted runtime components.
 
-For `nvngx_dlssnr.dll` from the pinned `dlssnr-310.8.SF-v2` package, Windows currently reports Authenticode status `NotSigned`. beta6 therefore requires the exact pinned extracted SHA-256 for that file instead of falsely requiring/claiming a valid NVIDIA signature.
+For `nvngx_dlssnr.dll` from the pinned `dlssnr-310.8.SF-v2` package, Windows reports Authenticode status `NotSigned`. The installer therefore requires the exact pinned extracted SHA-256 for that file instead of falsely requiring/claiming a valid NVIDIA signature.
 
 The regular `nvngx_dlss.dll` must match its pinned SHA-256 **and** have a valid NVIDIA Authenticode signature.
 
@@ -117,7 +117,7 @@ The manual path explains the whole stack and lets you download every component y
 
 - [Full manual installation guide](./docs/FULL_MANUAL_INSTALL_GUIDE_NO_INSTALLER.md)
 - [BattlEye / online-use warning and liability](./docs/BATTLEYE_WARNING_AND_LIABILITY.md)
-- [Testing status / release gate](./docs/TESTING_STATUS.md)
+- [Testing status](./docs/TESTING_STATUS.md)
 - [All download links](./docs/ALL_DOWNLOAD_LINKS.md)
 - [Sources and licenses](./docs/SOURCES_AND_LICENSES.md)
 - [Troubleshooting](./docs/TROUBLESHOOTING.md)
