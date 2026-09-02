@@ -52,9 +52,9 @@ The repo includes:
 
 - installer scripts
 - offline-only launcher
-- automatic cleanup
+- manual cleanup + status tools
 - a watchdog that aborts if normal DayZ/BattlEye is launched while the demo payload is staged
-- status + self-test tools
+- self-test tools
 - the tested ReShade / feeder preset from my working showcase
 - a full manual installation guide if you don't want to run the installer
 - all source/download links
@@ -83,9 +83,30 @@ Do **not** keep launching the START file from the downloaded GitHub folder after
 
 The project does **not** permanently live inside the DayZ game folder. The known ReShade/DLSS5 payload is only staged next to DayZ while the offline demo is running and is removed again by cleanup.
 
+## Known beta7 issue: automatic cleanup
+
+The automatic cleanup that triggers when the DayZDiag client closes is currently **broken in beta7** and can crash.
+
+The standalone manual cleanup has been tested successfully, so for beta7 always run this after closing the demo:
+
+```text
+C:\DayZ_DLSS5_OFFLINE_DEMO\CLEAN_FOR_MULTIPLAYER.cmd
+C:\DayZ_DLSS5_OFFLINE_DEMO\STATUS.cmd
+```
+
+and require:
+
+```text
+STATE: MULTIPLAYER CLEAN
+```
+
+before doing the Steam file verification and going back to normal BattlEye multiplayer.
+
+The automatic cleanup fix is planned for **v1.0-beta8**.
+
 ## What's planned next
 
-**v1.0-beta8** is planned to add an optional **admin-enabled local showcase mission** with the **Z admin menu** I used while making the original comparison shots. The idea is to make showcase work much easier — spawning weapons/items, setting up the player and preparing scenes without manually hunting everything down first.
+**v1.0-beta8** is planned to fix the automatic cleanup-on-exit path and add an optional **admin-enabled local showcase mission** with the **Z admin menu** I used while making the original comparison shots. The idea is to make showcase work much easier — spawning weapons/items, setting up the player and preparing scenes without manually hunting everything down first.
 
 That admin mission will still be strictly for the **local DayZDiag/offline setup**, not normal BattlEye multiplayer.
 
@@ -109,7 +130,7 @@ On my DayZ 1.29 / 2560×1440 test, that was `CLEAR 1`.
 ## Before going back to normal multiplayer — do all of this
 
 1. Close the DayZDiag client and local server.
-2. Run `C:\DayZ_DLSS5_OFFLINE_DEMO\CLEAN_FOR_MULTIPLAYER.cmd` (or `UNINSTALL.cmd` if removing the project).
+2. **For beta7, manually run** `C:\DayZ_DLSS5_OFFLINE_DEMO\CLEAN_FOR_MULTIPLAYER.cmd` (or `UNINSTALL.cmd` if removing the project).
 3. Run `C:\DayZ_DLSS5_OFFLINE_DEMO\STATUS.cmd`.
 4. Require:
 
@@ -159,7 +180,7 @@ Have fun breaking an old engine in new ways :D
 
 For anyone who doesn't trust random PowerShell installers from Reddit (fair lol): there is a full manual guide in the repo. You can download every component yourself from ReShade/GitHub, build the payload manually, start the local DayZDiag server first, and only stage the graphics files for the local Diag client.
 
-**Again: install/run the working copy from `C:\DayZ_DLSS5_OFFLINE_DEMO`, do not use this with normal DayZ/BattlEye, and when you're done clean it, check `STATE: MULTIPLAYER CLEAN`, and verify the DayZ game files in Steam before going back online.**
+**Again: install/run the working copy from `C:\DayZ_DLSS5_OFFLINE_DEMO`, do not use this with normal DayZ/BattlEye, and in beta7 always run CLEAN manually, check `STATE: MULTIPLAYER CLEAN`, and verify the DayZ game files in Steam before going back online.**
 
 Video:
 https://youtu.be/68b9V59VxeM
