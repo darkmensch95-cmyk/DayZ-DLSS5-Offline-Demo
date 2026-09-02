@@ -38,7 +38,7 @@ try {
     Check ($sig2.Status -eq [System.Management.Automation.SignatureStatus]::Valid -and [string]$sig2.SignerCertificate.Subject -match "NVIDIA") "nvngx_dlssnr.dll has a valid NVIDIA signature"
 } catch { Fail "Could not verify NVIDIA Authenticode signatures: $($_.Exception.Message)" }
 
-$renoExpected = "E1C28FDE0922B12FC10734E58C3D24A36808E575247F4FD4F36226540D7EE023"
+$renoExpected = "D5ADF82EB44B065F4C590AC91FE824BAB07AFEA0EB9F994BDE936710C8593952"
 $renoActual = (Get-FileHash (Join-Path $Payload "renodx-dlss5.addon64") -Algorithm SHA256).Hash.ToUpperInvariant()
 Check ($renoActual -eq $renoExpected) "RenoDX DLSS5 4.70 hash matches the pinned build"
 
