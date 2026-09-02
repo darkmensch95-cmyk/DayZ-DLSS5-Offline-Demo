@@ -5,7 +5,7 @@ $Root = Split-Path -Parent $PSCommandPath
 Ensure-Admin
 
 $cfgFile = Join-Path $Root "config.json"
-if (-not (Test-Path $cfgFile)) { throw "config.json missing. Use docs\06_MANUAL_CLEANUP.txt and/or Steam file verification." }
+if (-not (Test-Path $cfgFile)) { throw "config.json missing. Use docs\06_MANUAL_CLEANUP.txt and Steam file verification before normal multiplayer." }
 $cfg = Get-Content $cfgFile -Raw | ConvertFrom-Json
 $DayZ = [string]$cfg.DayZPath
 
@@ -34,9 +34,17 @@ $left = @(Get-DemoFilesInDayZ $DayZ)
 
 if ($left.Count -eq 0 -and $beOkay -and -not $beModified) {
     Write-Host "CLEAN: no known ReShade/DLSS5 demo hooks remain and BattlEye is in its normal Steam state." -ForegroundColor Green
+    Write-Host "" 
+    Write-Host "IMPORTANT: DO NOT RETURN TO BATTLEYE MULTIPLAYER YET." -ForegroundColor Red
+    Write-Host "Final required step: verify DayZ through Steam:" -ForegroundColor Yellow
+    Write-Host "  Steam -> Library -> DayZ -> Properties -> Installed Files" -ForegroundColor Cyan
+    Write-Host "        -> Verify integrity of game files" -ForegroundColor Cyan
+    Write-Host "Wait for verification/repair to finish before launching normal DayZ." -ForegroundColor Yellow
+    Write-Host "This clean result is not an anti-cheat or ban-safety guarantee." -ForegroundColor Red
     $code = 0
 } else {
     Write-Host "NOT CLEAN." -ForegroundColor Red
+    Write-Host "DO NOT launch normal DayZ / BattlEye." -ForegroundColor Red
     if ($left.Count -gt 0) { $left | ForEach-Object { Write-Host "  Remaining: $_" } }
     if (-not $beOkay -or $beModified) { Write-Host "BattlEye is not in the normal state. Use Steam file verification before multiplayer." -ForegroundColor Red }
     $code = 3
