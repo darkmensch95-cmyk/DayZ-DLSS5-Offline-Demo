@@ -1,12 +1,14 @@
 # DayZ DLSS 5 Neural Rendering — Offline Demo
 
 > [!CAUTION]
-> ## OFFLINE / LOCAL `DayZDiag_x64.exe` ONLY
-> **Do not use this setup on official, community, public, private, or otherwise BattlEye-protected multiplayer servers.**
+> ## ⚠️ OFFLINE / LOCAL `DayZDiag_x64.exe` ONLY — DO NOT USE WITH BATTLEYE ⚠️
+> **Do not use this setup on official, community, public, private, or any other BattlEye-protected multiplayer server.**
 >
-> This project temporarily uses ReShade Full Add-on and rendering add-ons next to the DayZ executable. It is an unofficial technical experiment and there is **no anti-cheat / ban-safety guarantee**.
+> This project temporarily places ReShade Full Add-on, rendering add-ons and DLSS-related runtime files next to the DayZ executable. **Launching normal DayZ / BattlEye while those files are present can trigger anti-cheat action and may result in a kick, account restriction or ban.** There is **no anti-cheat / ban-safety guarantee**.
 >
-> The included workflow is built around a **local DayZDiag server/client** only. Before normal multiplayer, run the cleanup tool and require `STATE: MULTIPLAYER CLEAN`.
+> **Never launch `DayZ_x64.exe`, `DayZ_BE.exe` or `DayZLauncher.exe` while the demo payload is staged.** Use only `DayZDiag_x64.exe` against the local server on `127.0.0.1:2302`.
+>
+> After you are finished: run the cleanup/uninstaller, confirm `STATE: MULTIPLAYER CLEAN`, **then use Steam → DayZ → Properties → Installed Files → Verify integrity of game files before returning to normal multiplayer.**
 
 Experimental DLSS 5 Neural Rendering in **DayZ 1.29**, fed through ReShade, copied DayZ depth, reconstructed Lumenite motion vectors, DLSS5-Feeder, a synthetic native-resolution DLAA/NGX evaluation, and RenoDX DLSS 5.
 
@@ -67,22 +69,30 @@ The repository intentionally contains **no third-party ReShade/NVIDIA/RenoDX/Lum
 8. In DayZ, disable Hardware Antialiasing / MSAA.
 9. `Home` opens ReShade. In the tested RenoDX build, `F6` toggles Neural Rendering.
 
-### Before normal multiplayer
+> [!WARNING]
+> While the demo payload is staged, **do not start normal DayZ, DayZ Launcher or BattlEye**. This setup is for the local DayZDiag client only.
 
-Run:
+### Mandatory cleanup before normal multiplayer
 
-```text
-CLEAN_FOR_MULTIPLAYER.cmd
-STATUS.cmd
-```
+When you are done with the experiment:
 
-Require:
+1. Close the DayZDiag client and local server.
+2. Run `CLEAN_FOR_MULTIPLAYER.cmd` (or `UNINSTALL.cmd` if removing the project).
+3. Run `STATUS.cmd` and require:
 
 ```text
 STATE: MULTIPLAYER CLEAN
 ```
 
-If you are unsure, verify DayZ through Steam before launching normal multiplayer.
+4. **Then verify the DayZ installation through Steam:**
+
+```text
+Steam → Library → DayZ → Properties → Installed Files → Verify integrity of game files
+```
+
+5. Only after cleanup **and** the Steam verification should you return to normal BattlEye multiplayer.
+
+The cleanup/status tools check the files known to this project. They are **not a promise from BattlEye or a server operator that your system is ban-safe**.
 
 ## Manual installation
 
@@ -91,6 +101,7 @@ Don't trust a random PowerShell installer from Reddit? Fair enough.
 The manual path explains the whole stack and lets you download every component yourself:
 
 - [Full manual installation guide](./docs/FULL_MANUAL_INSTALL_GUIDE_NO_INSTALLER.md)
+- [BattlEye / online-use warning and liability](./docs/BATTLEYE_WARNING_AND_LIABILITY.md)
 - [All download links](./docs/ALL_DOWNLOAD_LINKS.md)
 - [Sources and licenses](./docs/SOURCES_AND_LICENSES.md)
 - [Troubleshooting](./docs/TROUBLESHOOTING.md)
@@ -146,13 +157,13 @@ The exact resolution and frame numbers may differ.
 
 ## Disclaimer
 
-This is an unofficial community technical experiment.
+This is an unofficial community technical experiment. **Use is entirely at your own risk.**
 
-It is not affiliated with, sponsored by, approved by, or endorsed by Bohemia Interactive, BattlEye, NVIDIA, ReShade, RenoDX, LumeniteFX, DLSS5-Feeder, RankFTW, DayZ_LocalHost, or their authors/maintainers.
+The project is not affiliated with, sponsored by, approved by, or endorsed by Bohemia Interactive, BattlEye, NVIDIA, ReShade, RenoDX, LumeniteFX, DLSS5-Feeder, RankFTW, DayZ_LocalHost, or their authors/maintainers.
 
-The scripts and documentation are provided **AS IS**, without warranty. No author or distributor can guarantee that an anti-cheat system, server owner, game update, driver update, or future software change will consider any particular setup safe.
+The scripts and documentation are provided **AS IS**, without warranty. To the maximum extent permitted by applicable law, the authors/distributors accept no responsibility for bans, kicks, account restrictions, lost data, corrupted game files, crashes, system instability, or other damage caused by use or misuse of this project. Nothing here excludes rights or liability that cannot legally be excluded.
 
-If you use these files outside the documented local/offline DayZDiag environment, you do so entirely at your own risk.
+No author or distributor can guarantee that BattlEye, a game/server update, server administrator, driver update, or other software will consider any setup safe. **If you use these files with normal DayZ/BattlEye or on an online server, you accept the risk of anti-cheat action, including a possible ban.**
 
 ## Credits / upstream projects
 
