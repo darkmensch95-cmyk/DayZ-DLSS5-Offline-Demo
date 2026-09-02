@@ -8,13 +8,17 @@
 
 A bunch of people asked for a tutorial after the DayZ DLSS 5 experiment, so I cleaned the setup up and put it into a public beta.
 
-**BIG WARNING FIRST:**
+# ⚠️ BIG WARNING FIRST — OFFLINE / LOCAL DAYZDIAG ONLY ⚠️
 
-**THIS IS OFFLINE / LOCAL DAYZDIAG ONLY.**
+**DO NOT USE THIS ON OFFICIAL, COMMUNITY, PUBLIC, PRIVATE OR ANY OTHER BATTLEYE-PROTECTED MULTIPLAYER SERVER.**
 
-Do not use this on official, community or any other BattlEye-protected multiplayer server. The setup temporarily uses ReShade Full Add-on and graphics add-ons next to the DayZ executable. The launcher is built around a local DayZDiag server/client workflow and cleans the temporary files again after the demo, but there is no magical "ban proof" guarantee.
+The setup temporarily uses ReShade Full Add-on, rendering add-ons and DLSS-related runtime files next to the DayZ executable. **Launching normal DayZ/BattlEye while those files are present can trigger anti-cheat action and may result in a kick, account restriction or ban.** There is no "ban proof" guarantee here.
 
-If you decide to ignore the instructions and use it online, that's entirely on you.
+Use only `DayZDiag_x64.exe` against the local server on `127.0.0.1:2302`.
+
+Do **not** launch `DayZ_x64.exe`, `DayZ_BE.exe` or `DayZLauncher.exe` while the demo payload is staged.
+
+If you ignore the instructions and use it online / with BattlEye, you do so entirely at your own risk.
 
 What it actually does:
 
@@ -76,18 +80,30 @@ ReShade → Add-ons → Generic Depth
 
 On my DayZ 1.29 / 2560×1440 test, that was `CLEAR 1`.
 
-Before going back to normal multiplayer:
+## Before going back to normal multiplayer — do all of this
 
-1. Close the DayZDiag demo.
-2. Run `CLEAN_FOR_MULTIPLAYER.cmd`.
+1. Close the DayZDiag client and local server.
+2. Run `CLEAN_FOR_MULTIPLAYER.cmd` (or `UNINSTALL.cmd` if removing the project).
 3. Run `STATUS.cmd`.
-4. It should say:
+4. Require:
 
 ```text
 STATE: MULTIPLAYER CLEAN
 ```
 
-If you're still unsure, verify DayZ through Steam.
+5. **Then verify DayZ through Steam:**
+
+```text
+Steam → Library → DayZ → Properties → Installed Files → Verify integrity of game files
+```
+
+6. Only after cleanup **and** the Steam file verification should you launch normal DayZ/BattlEye again.
+
+The cleanup/status scripts only check the files known to this project. They are **not** a promise from BattlEye or any server admin that your system is ban-safe.
+
+### Small liability disclaimer
+
+This is an unofficial technical experiment provided **AS IS**, without warranty. Use it entirely at your own risk. To the maximum extent permitted by applicable law, the authors/distributors accept no responsibility for bans, kicks, account restrictions, lost data, corrupted files, crashes, system instability or other damage caused by use or misuse. This project is not affiliated with or endorsed by Bohemia Interactive, BattlEye, NVIDIA, ReShade, RenoDX, LumeniteFX, DLSS5-Feeder or the other referenced projects.
 
 GitHub:
 
@@ -101,6 +117,10 @@ Full manual setup instructions:
 
 `docs/FULL_MANUAL_INSTALL_GUIDE_NO_INSTALLER.md`
 
+BattlEye / online-use warning:
+
+`docs/BATTLEYE_WARNING_AND_LIABILITY.md`
+
 All sources/download links:
 
 `docs/ALL_DOWNLOAD_LINKS.md`
@@ -112,6 +132,8 @@ Have fun breaking an old engine in new ways :D
 ## Suggested first comment
 
 For anyone who doesn't trust random PowerShell installers from Reddit (fair lol): there is a full manual guide in the repo. You can download every component yourself from ReShade/GitHub, build the payload manually, start the local DayZDiag server first, and only stage the graphics files for the local Diag client.
+
+**Again: do not use this with normal DayZ/BattlEye. When you're done, clean it, check `STATE: MULTIPLAYER CLEAN`, and verify the DayZ game files in Steam before going back online.**
 
 Video:
 https://youtu.be/68b9V59VxeM
