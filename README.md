@@ -49,13 +49,16 @@ DayZ does not provide native DLSS motion vectors to this external setup. Lumenit
 
 ## Download
 
-### Public beta — v1.0-beta4
+### Release candidate — v1.0-beta5
 
 Use GitHub's **Code → Download ZIP** button or download the current source archive directly:
 
 https://github.com/darkmensch95-cmyk/DayZ-DLSS5-Offline-Demo/archive/refs/heads/main.zip
 
-The repository intentionally contains **no third-party ReShade/NVIDIA/RenoDX/Lumenite binaries or shader packs**. The installer downloads pinned/tested components from their documented upstream sources.
+The repository intentionally contains **no third-party ReShade/NVIDIA/RenoDX/Lumenite binaries or shader packs**. The installer downloads pinned components from their documented upstream sources and verifies exact hashes where applicable.
+
+> [!IMPORTANT]
+> The render stack has been field-tested on the reference machine, but the **beta5 installer/launcher still requires one full Windows/DayZ smoke test before it should be announced as a tested public release**. The upstream RenoDX 4.70 asset changed after the original showcase test, so beta5 pins the current binary and explicitly tracks that distinction. See [Testing status](./docs/TESTING_STATUS.md).
 
 ## Quick start
 
@@ -102,6 +105,7 @@ The manual path explains the whole stack and lets you download every component y
 
 - [Full manual installation guide](./docs/FULL_MANUAL_INSTALL_GUIDE_NO_INSTALLER.md)
 - [BattlEye / online-use warning and liability](./docs/BATTLEYE_WARNING_AND_LIABILITY.md)
+- [Testing status / release gate](./docs/TESTING_STATUS.md)
 - [All download links](./docs/ALL_DOWNLOAD_LINKS.md)
 - [Sources and licenses](./docs/SOURCES_AND_LICENSES.md)
 - [Troubleshooting](./docs/TROUBLESHOOTING.md)
@@ -122,7 +126,7 @@ Use `DisplayDepth` to verify that the selected depth buffer actually shows recog
 
 ## Tested presets included
 
-The repo includes sanitized plain-text presets from the working showcase:
+The repo includes sanitized plain-text presets based on the working showcase:
 
 - `config/ReShade.ini`
 - `config/dlss5.ini`
@@ -136,7 +140,7 @@ Important reference values include:
 - `Lumenite_Kernel` before `DLSS5_Feed`
 - MV sign `+1 / +1`
 - MV scale `1.0`
-- problematic validation sub-tests disabled
+- showcase validation settings
 - `reset_every=1`
 - native 100% work resolution
 - RenoDX NR enabled
