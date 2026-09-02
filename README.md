@@ -49,7 +49,7 @@ DayZ does not provide native DLSS motion vectors to this external setup. Lumenit
 
 ## Download
 
-### Release candidate — v1.0-beta5
+### Release candidate — v1.0-beta6
 
 Use GitHub's **Code → Download ZIP** button or download the current source archive directly:
 
@@ -58,7 +58,7 @@ https://github.com/darkmensch95-cmyk/DayZ-DLSS5-Offline-Demo/archive/refs/heads/
 The repository intentionally contains **no third-party ReShade/NVIDIA/RenoDX/Lumenite binaries or shader packs**. The installer downloads pinned components from their documented upstream sources and verifies exact hashes where applicable.
 
 > [!IMPORTANT]
-> The render stack has been field-tested on the reference machine, but the **beta5 installer/launcher still requires one full Windows/DayZ smoke test before it should be announced as a tested public release**. The upstream RenoDX 4.70 asset changed after the original showcase test, so beta5 pins the current binary and explicitly tracks that distinction. See [Testing status](./docs/TESTING_STATUS.md).
+> The render stack has been field-tested on the reference machine, but the **beta6 installer/launcher still requires one full Windows/DayZ smoke test before it should be announced as a tested public release**. The upstream RenoDX 4.70 asset changed after the original showcase test. beta6 also fixes the installer after discovering that the pinned DLSS NR SF-v2 runtime is `NotSigned`; that file is now accepted only when its exact pinned SHA-256 matches. See [Testing status](./docs/TESTING_STATUS.md).
 
 ## Quick start
 
@@ -71,6 +71,8 @@ The repository intentionally contains **no third-party ReShade/NVIDIA/RenoDX/Lum
 7. Wait for the local server and DayZDiag client.
 8. In DayZ, disable Hardware Antialiasing / MSAA.
 9. `Home` opens ReShade. In the tested RenoDX build, `F6` toggles Neural Rendering.
+
+If an earlier installer attempt failed and left a recognized partial `C:\DayZ_DLSS5_OFFLINE_DEMO` folder, the current `INSTALL.cmd` can verify the DayZ root is clean and offer a controlled `RETRY` instead of blindly deleting unknown data.
 
 > [!WARNING]
 > While the demo payload is staged, **do not start normal DayZ, DayZ Launcher or BattlEye**. This setup is for the local DayZDiag client only.
@@ -96,6 +98,16 @@ Steam → Library → DayZ → Properties → Installed Files → Verify integri
 5. Only after cleanup **and** the Steam verification should you return to normal BattlEye multiplayer.
 
 The cleanup/status tools check the files known to this project. They are **not a promise from BattlEye or a server operator that your system is ban-safe**.
+
+## Runtime verification model
+
+The release candidate pins exact hashes for the downloaded/extracted runtime components.
+
+For `nvngx_dlssnr.dll` from the pinned `dlssnr-310.8.SF-v2` package, Windows currently reports Authenticode status `NotSigned`. beta6 therefore requires the exact pinned extracted SHA-256 for that file instead of falsely requiring/claiming a valid NVIDIA signature.
+
+The regular `nvngx_dlss.dll` must match its pinned SHA-256 **and** have a valid NVIDIA Authenticode signature.
+
+See [Sources and licenses](./docs/SOURCES_AND_LICENSES.md) and [Testing status](./docs/TESTING_STATUS.md) for the exact values and provenance notes.
 
 ## Manual installation
 
