@@ -2,26 +2,37 @@
 DAYZ DLSS 5 OFFLINE DEMO - READ THIS FIRST
 ======================================================================
 
-OFFLINE / LOCAL DAYZDIAG USE ONLY.
+*** OFFLINE / LOCAL DAYZDIAG USE ONLY ***
 
 DO NOT USE THIS SETUP ON OFFICIAL, COMMUNITY, PUBLIC, PRIVATE, OR OTHERWISE
 BATTLEYE-PROTECTED MULTIPLAYER SERVERS.
 
-This project temporarily uses ReShade Full Add-on and rendering add-ons next to
-the DayZ executable. These files are intended only for the documented local
-DayZDiag experiment.
+DO NOT LAUNCH NORMAL DayZ_x64.exe, DayZ_BE.exe OR DayZLauncher.exe WHILE THE
+DEMO PAYLOAD IS PRESENT IN THE DAYZ FOLDER.
+
+This project temporarily uses ReShade Full Add-on, rendering add-ons and
+DLSS-related runtime files next to the DayZ executable. Launching normal DayZ /
+BattlEye while those files are present CAN trigger anti-cheat action and MAY
+result in a kick, account restriction or ban.
+
+There is NO anti-cheat / ban-safety guarantee.
+
+Use ONLY:
+
+    DayZDiag_x64.exe
+
+against the LOCAL server:
+
+    127.0.0.1:2302
 
 This project DOES NOT disable, patch, circumvent, or bypass BattlEye.
-
-There is NO anti-cheat / ban-safety guarantee. No author or distributor can
-guarantee that BattlEye, a server administrator, a future DayZ update, a driver
-update, or any third-party software will consider any particular setup safe.
 
 If you choose to copy these files into normal DayZ, launch normal DayZ while
 they are present, connect to online servers with them, modify the supplied
 safety scripts, or otherwise use this project outside the documented local
 DayZDiag workflow, you do so entirely at your own risk.
 
+LIABILITY DISCLAIMER:
 The scripts and documentation are provided AS IS, without warranty. To the
 maximum extent permitted by applicable law, the project authors/distributors
 assume no responsibility for bans, kicks, account restrictions, lost data,
@@ -35,18 +46,32 @@ LumeniteFX, DLSS5-Feeder, RankFTW, DayZ_LocalHost, or their authors/maintainers.
 
 SAFE WORKFLOW:
 
-1. Keep normal DayZ closed.
+1. Keep normal DayZ, DayZ Launcher and BattlEye CLOSED.
 2. Start only the LOCAL DayZDiag server.
 3. Stage the graphics payload only after the local server is ready.
 4. Start only DayZDiag_x64.exe as the client.
 5. Connect only to 127.0.0.1:2302.
 6. Close the local client/server when done.
-7. Run CLEAN_FOR_MULTIPLAYER.cmd.
+7. Run CLEAN_FOR_MULTIPLAYER.cmd (or UNINSTALL.cmd if removing the project).
 8. Run STATUS.cmd.
 9. Require: STATE: MULTIPLAYER CLEAN
-10. If unsure, verify DayZ through Steam before normal multiplayer.
+10. THEN verify DayZ through Steam:
+
+    Steam -> Library -> DayZ -> Properties -> Installed Files
+          -> Verify integrity of game files
+
+11. Wait for Steam verification/repair to finish completely.
+12. Only then return to normal DayZ / BattlEye multiplayer.
+
+IMPORTANT:
+A clean STATUS result only checks files known to this project. It is NOT a
+promise from BattlEye, Bohemia Interactive or a server operator that your
+system/account is ban-safe.
 
 FULL MANUAL:
 docs/FULL_MANUAL_INSTALL_GUIDE_NO_INSTALLER.md
+
+ONLINE/BATTLEYE WARNING:
+docs/BATTLEYE_WARNING_AND_LIABILITY.md
 
 END
