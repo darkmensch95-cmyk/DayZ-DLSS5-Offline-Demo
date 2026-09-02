@@ -143,7 +143,7 @@ function Download-File([string]$Url,[string]$OutFile,[long]$MinimumBytes=1) {
     while ($attempt -lt 3) {
         $attempt++
         try {
-            Invoke-WebRequest -UseBasicParsing -Headers @{"User-Agent"="DayZ-DLSS5-Offline-Demo/1.0-beta4"} -Uri $Url -OutFile $OutFile
+            Invoke-WebRequest -UseBasicParsing -Headers @{"User-Agent"="DayZ-DLSS5-Offline-Demo/1.0-beta5"} -Uri $Url -OutFile $OutFile
             if (-not (Test-Path $OutFile)) { throw "Download did not create $OutFile" }
             $len = (Get-Item $OutFile).Length
             if ($len -lt $MinimumBytes) { throw "Downloaded file is unexpectedly small ($len bytes): $Url" }
