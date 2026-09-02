@@ -17,6 +17,44 @@ result in a kick, account restriction or ban.
 
 There is NO anti-cheat / ban-safety guarantee.
 
+======================================================================
+INSTALLATION LOCATION - IMPORTANT
+======================================================================
+
+The downloaded GitHub ZIP/source folder may be extracted anywhere, for example:
+
+    Desktop
+    Downloads
+
+That downloaded folder is only the installer/source package.
+
+Run:
+
+    INSTALL.cmd
+
+from the extracted GitHub folder.
+
+The installer creates the ACTUAL working installation at:
+
+    C:\DayZ_DLSS5_OFFLINE_DEMO
+
+After installation, start the offline demo from:
+
+    C:\DayZ_DLSS5_OFFLINE_DEMO\START_OFFLINE_DEMO.cmd
+
+DO NOT keep launching START_OFFLINE_DEMO.cmd from the downloaded GitHub source
+folder after installation. The installed C:\DayZ_DLSS5_OFFLINE_DEMO folder
+contains the generated config.json, downloaded payload, LocalHost files, logs
+and runtime state required by the launcher.
+
+The project is NOT permanently installed inside the normal DayZ game folder.
+The known ReShade/DLSS5 payload is staged there only while the offline demo is
+active and is removed again during cleanup.
+
+======================================================================
+OFFLINE USE
+======================================================================
+
 Use ONLY:
 
     DayZDiag_x64.exe
@@ -46,22 +84,25 @@ LumeniteFX, DLSS5-Feeder, RankFTW, DayZ_LocalHost, or their authors/maintainers.
 
 SAFE WORKFLOW:
 
-1. Keep normal DayZ, DayZ Launcher and BattlEye CLOSED.
-2. Start only the LOCAL DayZDiag server.
-3. Stage the graphics payload only after the local server is ready.
-4. Start only DayZDiag_x64.exe as the client.
-5. Connect only to 127.0.0.1:2302.
-6. Close the local client/server when done.
-7. Run CLEAN_FOR_MULTIPLAYER.cmd (or UNINSTALL.cmd if removing the project).
-8. Run STATUS.cmd.
-9. Require: STATE: MULTIPLAYER CLEAN
-10. THEN verify DayZ through Steam:
+1. Download/extract the GitHub package anywhere.
+2. Run INSTALL.cmd as administrator.
+3. Confirm installation completed at C:\DayZ_DLSS5_OFFLINE_DEMO.
+4. Keep normal DayZ, DayZ Launcher and BattlEye CLOSED.
+5. Start C:\DayZ_DLSS5_OFFLINE_DEMO\START_OFFLINE_DEMO.cmd.
+6. The launcher starts only the LOCAL DayZDiag server/client workflow.
+7. Connect only to 127.0.0.1:2302.
+8. Close the local client/server when done.
+9. Run C:\DayZ_DLSS5_OFFLINE_DEMO\CLEAN_FOR_MULTIPLAYER.cmd
+   (or UNINSTALL.cmd if removing the project).
+10. Run C:\DayZ_DLSS5_OFFLINE_DEMO\STATUS.cmd.
+11. Require: STATE: MULTIPLAYER CLEAN
+12. THEN verify DayZ through Steam:
 
     Steam -> Library -> DayZ -> Properties -> Installed Files
           -> Verify integrity of game files
 
-11. Wait for Steam verification/repair to finish completely.
-12. Only then return to normal DayZ / BattlEye multiplayer.
+13. Wait for Steam verification/repair to finish completely.
+14. Only then return to normal DayZ / BattlEye multiplayer.
 
 IMPORTANT:
 A clean STATUS result only checks files known to this project. It is NOT a
