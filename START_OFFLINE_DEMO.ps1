@@ -24,7 +24,7 @@ $confirm = Read-Host "Type exactly: OFFLINE"
 if ($confirm -cne "OFFLINE") { throw "Offline confirmation not accepted." }
 
 Assert-BattlEyeNormal $DayZ
-if (Test-Path $Pending -or @(Get-DemoFilesInDayZ $DayZ).Count -gt 0) {
+if ((Test-Path $Pending) -or (@(Get-DemoFilesInDayZ $DayZ).Count -gt 0)) {
     Write-Host "Stale demo files detected. Running emergency cleanup first..." -ForegroundColor Yellow
     & (Join-Path $Root "CLEAN_FOR_MULTIPLAYER.ps1") -NoPause
     if ($LASTEXITCODE -ne 0) { throw "Could not establish a clean starting state." }
