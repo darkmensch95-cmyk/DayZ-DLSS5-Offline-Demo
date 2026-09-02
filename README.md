@@ -47,35 +47,25 @@ DayZ does not provide native DLSS motion vectors to this external setup. Lumenit
 
 ## Download
 
-### Public beta
+### Public beta — v1.0-beta4
 
-**v1.0-beta4**
+Use GitHub's **Code → Download ZIP** button or download the current source archive directly:
 
-[Download `DayZ_DLSS5_Offline_Demo_v1.0-beta4_PUBLIC.zip`](./dist/DayZ_DLSS5_Offline_Demo_v1.0-beta4_PUBLIC.zip)
+https://github.com/darkmensch95-cmyk/DayZ-DLSS5-Offline-Demo/archive/refs/heads/main.zip
 
-SHA-256:
-
-```text
-1EA7F398F0052B3DD06C14DA27AD573706FA897BDA14347492E7F0EA0B8365B7
-```
-
-The ZIP contains **no third-party ReShade/NVIDIA/RenoDX/Lumenite binaries or shader packs**. The installer downloads pinned/tested components from the documented upstream sources.
+The repository intentionally contains **no third-party ReShade/NVIDIA/RenoDX/Lumenite binaries or shader packs**. The installer downloads pinned/tested components from their documented upstream sources.
 
 ## Quick start
 
 1. Close DayZ, DayZDiag and DayZ Launcher.
-2. Download and extract the beta ZIP.
-3. Run `VERIFY_PACKAGE.cmd`.
-4. Run `INSTALL.cmd` as administrator.
-5. Read the warning and type exactly:
-   `I UNDERSTAND OFFLINE ONLY`
-6. After installation, run:
-   `C:\DayZ_DLSS5_OFFLINE_DEMO\START_OFFLINE_DEMO.cmd`
-7. Type exactly:
-   `OFFLINE`
-8. Wait for the local server and DayZDiag client.
-9. In DayZ, disable Hardware Antialiasing / MSAA.
-10. `Home` opens ReShade. In the tested RenoDX build, `F6` toggles Neural Rendering.
+2. Download and extract this repository.
+3. Run `INSTALL.cmd` as administrator.
+4. Read the warning and type exactly: `I UNDERSTAND OFFLINE ONLY`
+5. After installation, run `C:\DayZ_DLSS5_OFFLINE_DEMO\START_OFFLINE_DEMO.cmd`.
+6. Type exactly: `OFFLINE`.
+7. Wait for the local server and DayZDiag client.
+8. In DayZ, disable Hardware Antialiasing / MSAA.
+9. `Home` opens ReShade. In the tested RenoDX build, `F6` toggles Neural Rendering.
 
 ### Before normal multiplayer
 
@@ -98,13 +88,14 @@ If you are unsure, verify DayZ through Steam before launching normal multiplayer
 
 Don't trust a random PowerShell installer from Reddit? Fair enough.
 
-The full manual guide explains **every component, download, file location, tested version, depth-buffer setting, launch order, log check, troubleshooting step, and cleanup step**:
+The manual path explains the whole stack and lets you download every component yourself:
 
 - [Full manual installation guide](./docs/FULL_MANUAL_INSTALL_GUIDE_NO_INSTALLER.md)
 - [All download links](./docs/ALL_DOWNLOAD_LINKS.md)
 - [Sources and licenses](./docs/SOURCES_AND_LICENSES.md)
 - [Troubleshooting](./docs/TROUBLESHOOTING.md)
 - [Manual cleanup](./docs/MANUAL_CLEANUP.md)
+- [Reddit release-post draft](./docs/REDDIT_RELEASE_POST.md)
 
 ## Important DayZ depth setup
 
@@ -120,7 +111,7 @@ Use `DisplayDepth` to verify that the selected depth buffer actually shows recog
 
 ## Tested presets included
 
-The repo/package includes sanitized plain-text presets from the working showcase:
+The repo includes sanitized plain-text presets from the working showcase:
 
 - `config/ReShade.ini`
 - `config/dlss5.ini`
