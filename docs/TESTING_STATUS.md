@@ -10,18 +10,42 @@ beta7 also incorporates fixes found during a real Windows/DayZ installer/launche
 
 The following parts were run for real rather than only statically inspected:
 
-1. the installer completed successfully;
-2. the pinned DLSS NR `310.8.SF-v2` runtime passed the exact SHA-256 check while correctly reporting `NotSigned` instead of being falsely rejected;
-3. the LocalHost DayZDiag server started and reached CE/Hive initialization;
-4. the public launcher detected the real `DayZDiag_x64.exe -server` process and successfully continued to the local DayZDiag client launch;
-5. the launcher cleanup ran after the session;
-6. a separate manual PowerShell audit found no known ReShade/DLSS5 demo payload left in the DayZ root;
-7. no DayZ/DayZDiag/BattlEye process remained running after cleanup;
-8. `DayZ_BE.exe` and the normal `BattlEye` directory were present;
-9. no `.disabled` BattlEye names were present;
-10. the resulting manual audit reported `STATE: CLEAN`.
+1. a fresh beta7 GitHub download was used;
+2. the installer completed successfully;
+3. the pinned DLSS NR `310.8.SF-v2` runtime passed the exact SHA-256 check while correctly reporting `NotSigned` instead of being falsely rejected;
+4. the LocalHost DayZDiag server started and reached CE/Hive initialization;
+5. the public launcher detected the real `DayZDiag_x64.exe -server` process and successfully continued to the local DayZDiag client launch;
+6. ReShade / DLSS5 loaded from the shipped preset without requiring manual reconfiguration on the reference system;
+7. the **automatic cleanup triggered when the DayZDiag client closed crashed** during the end-to-end test;
+8. `CLEAN_FOR_MULTIPLAYER.cmd` was then run manually and completed successfully;
+9. `STATUS.cmd` / a separate manual PowerShell audit found no known ReShade/DLSS5 demo payload left in the DayZ root;
+10. no DayZ/DayZDiag/BattlEye process remained running after manual cleanup;
+11. `DayZ_BE.exe` and the normal `BattlEye` directory were present;
+12. no `.disabled` BattlEye names were present;
+13. the resulting manual cleanup audit reported a clean state.
 
 This is still a beta. A successful run on the reference machine is not a guarantee that every Windows configuration, future DayZ build, driver or upstream component will behave identically.
+
+### Known beta7 issue: automatic cleanup on exit
+
+The automatic cleanup path that runs when the DayZDiag client closes is currently **broken in beta7** and can crash instead of completing the cleanup sequence.
+
+The standalone manual cleanup path has been tested successfully on the reference machine. Until beta8, users should **always** manually run:
+
+```text
+C:\DayZ_DLSS5_OFFLINE_DEMO\CLEAN_FOR_MULTIPLAYER.cmd
+C:\DayZ_DLSS5_OFFLINE_DEMO\STATUS.cmd
+```
+
+and require:
+
+```text
+STATE: MULTIPLAYER CLEAN
+```
+
+before doing the final Steam file verification and returning to normal BattlEye multiplayer.
+
+A fix for the automatic cleanup-on-exit path is planned for **v1.0-beta8**.
 
 ### beta7 launcher readiness fix
 
@@ -67,10 +91,10 @@ The regular `nvngx_dlss.dll` remains required to match its pinned SHA-256 **and*
 
 ### Before normal BattlEye multiplayer
 
-Even after the cleanup reports clean, the documented final step remains mandatory:
+For beta7, the documented final sequence is:
 
 1. close the demo;
-2. run `CLEAN_FOR_MULTIPLAYER.cmd` if needed;
+2. manually run `CLEAN_FOR_MULTIPLAYER.cmd`;
 3. run `STATUS.cmd` and require `STATE: MULTIPLAYER CLEAN`;
 4. use Steam → DayZ → Properties → Installed Files → **Verify integrity of game files**;
 5. only then return to normal DayZ/BattlEye multiplayer.
