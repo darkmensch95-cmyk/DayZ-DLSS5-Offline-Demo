@@ -1,5 +1,15 @@
 # DayZ DLSS 5 Neural Rendering — Offline Demo
 
+> [!WARNING]
+> ## ⚠️ LEGACY / OUTDATED EXPERIMENT — NOT THE RECOMMENDED METHOD ANYMORE ⚠️
+> **This repository documents an older proof-of-concept approach. There are now significantly better, cleaner and more practical methods for experimenting with DLSS / Neural Rendering in DayZ.**
+>
+> I **do not recommend starting with this setup today** and I am no longer treating it as the preferred solution. The repository remains online mainly as a technical reference / archive for what was tested at the time.
+>
+> If you are starting from scratch, **use a newer method instead**. The instructions below may still work in the tested environment, but they are comparatively cumbersome, brittle and can become outdated as DayZ, drivers, ReShade, DLSS-related components and other dependencies change.
+>
+> The BattlEye / offline-only warnings below still apply in full.
+
 > [!CAUTION]
 > ## ⚠️ OFFLINE / LOCAL `DayZDiag_x64.exe` ONLY — DO NOT USE WITH BATTLEYE ⚠️
 > **Do not use this setup on official, community, public, private, or any other BattlEye-protected multiplayer server.**
